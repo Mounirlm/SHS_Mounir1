@@ -1,0 +1,32 @@
+package com.shs.client.model;
+
+public class EquipmentQuoteModel {
+    private int nbpieces;
+	private String message;
+	
+	public EquipmentQuoteModel(int nbpieces, String message) {
+		this.message = message;
+		this.nbpieces = nbpieces;
+	}
+	
+	public int getnbpieces() {
+		return nbpieces;
+	}
+	
+	public void setnbpieces(int nbpieces) {
+		 this.nbpieces = nbpieces;
+	}
+	
+	public String getmessage() {
+		return message;
+	}
+	
+	public void setmessage(String message) {
+		 this.message = message;
+	}
+
+	public void add(EquipmentQuoteModel message2) {
+		// TODO Auto-generated method stub
+		
+	}
+}
