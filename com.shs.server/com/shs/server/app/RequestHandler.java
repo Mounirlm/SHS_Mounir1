@@ -196,7 +196,7 @@ public class RequestHandler implements Runnable {
 			ResidentRequestManager reqResident = new ResidentRequestManager(connDB, reader, writer, resident, request);
 			message=reqResident.requestManager();
 			break;
-		
+		// redirect to BuildRequestManager and give connection
 		case "Building":
 			
 			System.out.println(request);
