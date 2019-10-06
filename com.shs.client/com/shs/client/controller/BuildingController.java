@@ -61,27 +61,7 @@ public class BuildingController {
 	    
 		//sensorService.getSensorsInRoom(idRoom);
 		getRoomListInFloor(1);
-		
-		//System.out.println("il fait bo aujourdhui");
-		//getSensorInROOM(1);
-		//System.out.println("toto");
-		
-		//room.setSensors();
-		//floor = getFloor();
-//		System.out.println(floor);
-//		int idFloor =getFloorId(floor);
-//		System.out.println(idFloor);
-//		getRoomListInFloor(1) ;
-		
-//		floor.setId(floor.getId());
-//		System.out.println(floor);
-//		room.setSensors(this.getSensorBindToRoom(floor.getId()));
-//		System.out.println(room.getSensors());
-//		floor.getSensors();
-	
-		
-		
-		
+
 		
 	}
 	// Test if they are several building
@@ -203,6 +183,8 @@ public class BuildingController {
 		 return typeSensorService.getSensorType(name);
 		 
 	 }
+	
+	
 	
 	public static void  getSensorInROOM(Floor f) throws IOException {
 		
