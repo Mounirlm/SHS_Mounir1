@@ -226,6 +226,7 @@ public class MapSHS extends JFrame implements IUpdatable{
 
 
 	
+	// MapSHS implement IUpdatable
 	public void update() 
 	{
 		itemsListStock.setListData(building.getStock().getSensorArray());
