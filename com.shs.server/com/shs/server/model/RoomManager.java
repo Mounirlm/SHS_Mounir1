@@ -310,6 +310,7 @@ public class RoomManager {
 		return rs.getInt(1);
 	}
 
+	// request sql rooms by idFloor
 	public static ArrayList<Room> getRoomsWithPostion(int idFloor) throws SQLException {
 		
 		
