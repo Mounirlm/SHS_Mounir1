@@ -432,6 +432,7 @@ public class RoomClientHandler {
 		return nRooms;
 	}
 	
+	// get List of Room by floor
 	public ArrayList<Room> selectRoomsWithPosition(int idFloor) throws IOException {
 		List<Room> list = new ArrayList<>();
 		//connections
