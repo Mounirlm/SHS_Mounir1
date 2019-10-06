@@ -22,6 +22,8 @@ public class Sensor {
 	private Type_Sensor fk_type_sensor;
 	private Integer scope_sensor;
 	private String date_setup_formatted;
+	
+	//adding coordinate
 	private Integer x;
 	private Integer y;
 	
