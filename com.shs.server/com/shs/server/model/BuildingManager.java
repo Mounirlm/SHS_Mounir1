@@ -19,6 +19,7 @@ public class BuildingManager {
 		this.conn=con;
 	}
 	
+	//request sql to database to retrieve List of building
 	public static ArrayList<Building> getBuilding() throws SQLException{
 		
 		Statement Stmt = conn.createStatement();
