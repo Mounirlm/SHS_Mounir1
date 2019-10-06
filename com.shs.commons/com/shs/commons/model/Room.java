@@ -13,7 +13,7 @@ public class Room implements Comparable<Room>{
 	private Wing_Room wing_room;
 	private Integer nb_doors;
 	private Integer nb_windows;
-	//adding coordinates and dimension
+	//adding coordinates and dimension of room
 	private Integer x;
 	private Integer y;
 	private Integer width;
