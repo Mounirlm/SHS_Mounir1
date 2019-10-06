@@ -55,7 +55,7 @@ public class BuildingController {
 		sensorService= new SensorController();
 		typeSensorService =new TypeSensorController();
 		
-		
+		//set building with floorList
 		building.setFloor(floorService.getFloorInBuilding());
 		
 	    
