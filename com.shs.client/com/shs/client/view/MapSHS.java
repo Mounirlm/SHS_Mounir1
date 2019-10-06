@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -132,16 +133,25 @@ public class MapSHS extends JFrame implements IUpdatable{
 				
 				
 				Floor f = (Floor)itemsListFloor.getSelectedValue();
-				//if()
-				System.out.println(f.getId());
+				
 				
 				try {
 					
 					
 					f.setRoom((buildingController.getRoomListInFloor(f.getId())));
-					buildingController.getSensorInROOM(f);
-					f.getSensors();
+					buildingController.setSensorInROOM(f);
 					
+					
+					ArrayList<Sensor> sensor2 = new ArrayList<>();
+					for (Room r: f.getRoom()) 
+					{
+						
+						sensor2.addAll(r.getSensors());
+					}
+						
+					f.setSensors(sensor2);
+					
+					System.out.println( sensor2 + " totu");
 					
 					itemsListSensor.setListData(f.getSensors().toArray());
 					
