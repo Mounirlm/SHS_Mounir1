@@ -196,14 +196,15 @@ public class RequestHandler implements Runnable {
 			ResidentRequestManager reqResident = new ResidentRequestManager(connDB, reader, writer, resident, request);
 			message=reqResident.requestManager();
 			break;
-		// redirect to BuildRequestManager and give connection
+		// redirect to BuildRequestManager and give it connection
 		case "Building":
 			
 			System.out.println(request);
 			BuildingRequestManager reqBuilding = new BuildingRequestManager(connDB, reader, writer, request);
 			message=reqBuilding.requestManager();
 			
-			break;	
+			break;
+		// 	redirect to FloorRequestManager and give it connection
 		case "Floor":
 			Floor floor =(Floor) object;
 			FloorRequestManager reqFloor = new FloorRequestManager(connDB, reader, writer, floor, request );
