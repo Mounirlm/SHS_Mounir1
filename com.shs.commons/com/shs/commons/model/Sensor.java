@@ -23,7 +23,7 @@ public class Sensor {
 	private Integer scope_sensor;
 	private String date_setup_formatted;
 	
-	//adding coordinate
+	//adding coordinate of sensor
 	private Integer x;
 	private Integer y;
 	
