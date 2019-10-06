@@ -240,6 +240,7 @@ public class SensorManager {
 		return rs.getInt(1);
 	}
 	
+	// get all sensors
 	public static ArrayList<Sensor> getSensorsWithPosition() throws SQLException, ParseException{
 		Statement Stmt = conn.createStatement();
 		Statement Stmt2 = conn.createStatement();
@@ -327,6 +328,7 @@ public class SensorManager {
 		return sensorsList;
 	}
 	
+	// get all sensors by Romm id
 	public static ArrayList<Sensor> getSensorsInRoom(int idRoom) throws SQLException, ParseException{
 		
 		Statement Stmt = conn.createStatement();
