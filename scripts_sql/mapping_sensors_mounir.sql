@@ -212,29 +212,29 @@ insert into type_sensor (name, trigger_point_min, trigger_point_max, nb_alerts) 
 insert into type_sensor (name, trigger_point_min, trigger_point_max, nb_alerts) values ('fall_sensor', null, 1, 2);
 
 /*Stock*/
-insert into sensor (sensor_name, ip_address, mac_address, date_setup,status, installed, price,fk_room, fk_type_sensor, scope_sensor,x,y)
-values ('sm-1g-25', '192.168.20.61', 'FE000LKS97', null, true, false, 25.99,null, 1,10,null,null),
- ('sm-1g-26', '192.168.20.62', 'FE000LKS98', null, true, false, 25.99, null, 1,10,null,null),
- ('sm-1g-27', '192.168.20.63', 'FE000LKS99', null, true, false, 25.99, null, 1,10,null,null),
- ('tp-1g-22', '192.168.20.141', 'TP000LKS81', null, true, false, 36.99,null, 2,10,null,null),
- ('tp-1g-23', '192.168.20.142', 'TP000LKS82',null , true, false, 36.99,null,  2,10,null,null),
- ('tp-1g-24', '192.168.20.143', 'TP000LKS83', null, true, false, 36.99,null, 2,10,null,null),
- ('tp-1g-25', '192.168.20.144', 'TP000LKS84', null, true, false, 36.99,null, 2,10,null,null),
- ('do-1g-25', '192.168.20.261', 'DO000LKS97', null, true, false, 44.99,null, 3,10,null,null),
- ('do-1g-26', '192.168.20.262', 'DO000LKS98',null,  true, false, 44.99,null, 3,10,null,null),
- ('do-1g-27', '192.168.20.263', 'DO000LKS99',null,  true, false, 44.99,null, 3,10,null,null),
- ('do-1g-28', '192.168.20.264', 'DO000LKS100',null,  true, false, 44.99,null,3,10,null,null),
- ('WI-1g-23', '192.168.20.363', 'WI000LKS99',null,  true, false, 60.99,null, 4,10,null,null),
- ('WI-1g-23', '192.168.20.364', 'WI000LKS100',null,  true, false, 60.99,null,4,10,null,null),
- ('WI-1g-24', '192.168.20.365', 'WI000LKS101',null,  true, false, 60.99,null,4,10,null,null);
+insert into sensor (sensor_name, ip_address, mac_address, date_setup,status, installed, fk_position,price,fk_room, fk_type_sensor, scope_sensor,x,y)
+values 
+ ('sm-1g-25', '192.168.20.61', 'FE000LKS97', null, true, false,null, 25.99,null, 1,10,null,null),
+ ('sm-1g-26', '192.168.20.62', 'FE000LKS98', null, true, false,null, 25.99, null, 1,10,null,null),
+ ('sm-1g-27', '192.168.20.63', 'FE000LKS99', null, true, false,null, 25.99, null, 1,10,null,null),
+ ('tp-1g-22', '192.168.20.141', 'TP000LKS81', null, true, false,null, 36.99,null, 2,10,null,null),
+ ('tp-1g-23', '192.168.20.142', 'TP000LKS82',null , true, false,null, 36.99,null,  2,10,null,null),
+ ('tp-1g-24', '192.168.20.143', 'TP000LKS83', null, true, false,null, 36.99,null, 2,10,null,null),
+ ('tp-1g-25', '192.168.20.144', 'TP000LKS84', null, true, false,null, 36.99,null, 2,10,null,null),
+ ('do-1g-25', '192.168.20.261', 'DO000LKS97', null, true, false,null, 44.99,null, 3,10,null,null),
+ ('do-1g-26', '192.168.20.262', 'DO000LKS98',null,  true, false,null, 44.99,null, 3,10,null,null),
+ ('do-1g-27', '192.168.20.263', 'DO000LKS99',null,  true, false,null, 44.99,null, 3,10,null,null),
+ ('do-1g-28', '192.168.20.264', 'DO000LKS100',null,  true, false,null, 44.99,null,3,10,null,null),
+ ('WI-1g-23', '192.168.20.363', 'WI000LKS99',null,  true, false,null, 60.99,null, 4,10,null,null),
+ ('WI-1g-23', '192.168.20.364', 'WI000LKS100',null,  true, false,null, 60.99,null,4,10,null,null),
+ ('WI-1g-24', '192.168.20.365', 'WI000LKS101',null,  true, false,null, 60.99,null,4,10,null,null);
 
  /*fisrt floor*//*1 sensor by bedroom*/
 /*smoke*/
-insert into sensor (sensor_name, ip_address, mac_address, date_setup, status, installed, price,fk_room, fk_type_sensor,scope_sensor,x,y)
-values ('sm-1g-5', '192.168.20.35', 'FE000LKS71', '2019-04-16', true, true, 25.99, 1, 1,10,85,203);
+insert into sensor (sensor_name, ip_address, mac_address, date_setup, status, installed,fk_position, price,fk_room, fk_type_sensor,scope_sensor,x,y)
+values ('sm-1g-5', '192.168.20.35', 'FE000LKS71', '2019-09-07', true, true,null, 25.99, 2, 1,10,85,245);
 
-UPDATE sensor
-SET date_setup = '2014-09-07' , fk_room= 2, x=85,y=245;
+
  
 					  
 /*Alert test*/												  
