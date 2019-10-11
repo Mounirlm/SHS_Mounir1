@@ -63,7 +63,7 @@ public class MyTransferHandler extends TransferHandler
             if (value instanceof Sensor) 
             {
             	Sensor se = (Sensor) value;
-            	return (Transferable) se;
+            	return  se;
             }
         }
         return null;
