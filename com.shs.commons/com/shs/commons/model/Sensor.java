@@ -1,6 +1,7 @@
 package com.shs.commons.model;
 
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -8,7 +9,7 @@ import java.util.Date;
 
 
 
-public class Sensor {
+public class Sensor implements Transferable {
 	private int id;
 	private String sensor_name;
 	private String ip_address;
@@ -29,8 +30,8 @@ public class Sensor {
 	
 	private Room room;
 	
-	//transferable : Classe qui permet a des composants swing d'échanger 
-		//des transferables  par Dragndrop
+	//transferable : Classe qui permet a des composants swing d'échanger des transferables  par Dragndrop
+	
 		public static final DataFlavor SENSOR_DATA_FLAVOR = new DataFlavor(Sensor.class, "java/ListItem");
 	
 	
@@ -49,7 +50,7 @@ public class Sensor {
 		this.date_setup = date_setup;
 		this.status = status;
 		this.installed = installed;
-		this.fk_position = fk_position;
+		
 		this.price = price;
 		this.fk_room = fk_room;
 		this.fk_type_sensor = fk_type_sensor;
@@ -160,13 +161,7 @@ public class Sensor {
 	}
 	
 	
-	@Override
-	public String toString() {
-		return "Sensor [id=" + id + ", sensor_name=" + sensor_name + ", ip_address=" + ip_address + ", mac_address="
-				+ mac_address + ", date_setup=" + date_setup + ", status=" + status + ", installed=" + installed
-				+ ", fk_position=" + fk_position + ", price=" + price + ", fk_room=" + fk_room + ", fk_type_sensor="
-				+ fk_type_sensor + ", scope_sensor=" + scope_sensor + ", date_setup_formatted=" + date_setup_formatted+ "]";
-	}
+	
 
 	public Object[] getAsArray() {
 		Object[] array = {id, sensor_name, ip_address, mac_address, date_setup, status, installed, fk_position, price, fk_room, fk_type_sensor, scope_sensor};
@@ -222,7 +217,10 @@ public class Sensor {
 		}
 	
 
-	
+		@Override
+		public String toString() {
+			return "Sensor [id=" + id + ", sensor_name=" + sensor_name +  ", status=" + status + ", fk_type_sensor=" + fk_type_sensor +"]";
+		}
 
 	
 	
