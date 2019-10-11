@@ -59,8 +59,7 @@ public class BuildingController {
 		building.setFloor(floorService.getFloorInBuilding());
 		
 	    
-		//sensorService.getSensorsInRoom(idRoom);
-		getRoomListInFloor(1);
+		
 
 		
 	}
@@ -87,7 +86,7 @@ public class BuildingController {
 	
 	public static List<Floor> getBuildingFloorList() throws IOException
 		{	
-			    //building.setFloor(floorService.getFloorInBuilding());
+			    
 			    
 				return  floorService.getFloorInBuilding();
 		}
@@ -186,7 +185,7 @@ public class BuildingController {
 	
 	
 	
-	public static void  getSensorInROOM(Floor f) throws IOException {
+	public static void  setSensorInROOM(Floor f) throws IOException {
 		
 		int cpt=0;
 		ArrayList<Room> rooms  =roomService.selectRoomsWithPosition(f.getId());
@@ -208,7 +207,23 @@ public class BuildingController {
 	}
 	
 	
-	
+	public static List <Sensor> getSensorsNotInstalled () throws IOException 
+	{
+//		   Sensor sensor = new Sensor();
+//		   ArrayList<Sensor> sensors = new ArrayList<Sensor>();
+//		   for (Sensor s :  sensorService.getSensorsNotInstalled()) 
+//		   {
+//			   sensor.setId(s.getId());
+//			   sensor.setInstalled(s.getInstalled());
+//			   sensor.setFk_type_sensor(s.getFk_type_sensor());
+//			   sensor.setX(s.getX());
+//			   sensor.setY(s.getY());
+//			   
+//			   if (sensor.getInstalled()==false && sensor.getX()==null && sensor.getY()==null)  sensors.add(sensor);
+//		   }
+			
+		  return sensorService.getSensorsNotInstalled();
+	}
 	
 	
 	 
