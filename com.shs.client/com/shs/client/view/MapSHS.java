@@ -31,6 +31,7 @@ import com.shs.commons.model.Building;
 import com.shs.commons.model.Floor;
 import com.shs.commons.model.Room;
 import com.shs.commons.model.Sensor;
+import com.shs.commons.model.Stock;
 
 public class MapSHS extends JFrame implements IUpdatable{
 	
@@ -51,6 +52,7 @@ public class MapSHS extends JFrame implements IUpdatable{
 	Building building;
 	BuildingController buildingController;
 	Floor floor;
+	Stock stock;
 	
 	
 	
@@ -68,7 +70,14 @@ public class MapSHS extends JFrame implements IUpdatable{
 			buildingController=new BuildingController();
 		
 			building=buildingController.getBuilding();
-			//
+			
+			//add sensor to stock
+			
+			stock=new Stock();
+			stock.setSensors(BuildingController.getSensorsNotInstalled());
+			building.setStock(stock);
+			
+		
 			
 		} catch (IOException | ClassNotFoundException | SQLException e2) {
 			// TODO Auto-generated catch block
@@ -140,8 +149,7 @@ public class MapSHS extends JFrame implements IUpdatable{
 					
 					f.setRoom((buildingController.getRoomListInFloor(f.getId())));
 					buildingController.setSensorInROOM(f);
-					
-					
+
 					ArrayList<Sensor> sensor2 = new ArrayList<>();
 					for (Room r: f.getRoom()) 
 					{
@@ -151,17 +159,12 @@ public class MapSHS extends JFrame implements IUpdatable{
 						
 					f.setSensors(sensor2);
 					
-					System.out.println( sensor2 + " totu");
-					
 					itemsListSensor.setListData(f.getSensors().toArray());
-					
-					
-					
 					plan.setCurrent_floor(f);
 						
 					
 				} catch (IOException e2) {
-					// TODO Auto-generated catch block
+					
 					e2.printStackTrace();
 				}
 		        
@@ -236,7 +239,7 @@ public class MapSHS extends JFrame implements IUpdatable{
 
 
 	
-	// MapSHS implement IUpdatable
+	// MapSHS implements IUpdatable
 	public void update() 
 	{
 		itemsListStock.setListData(building.getStock().getSensorArray());
