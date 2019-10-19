@@ -418,18 +418,7 @@ public static ArrayList<Sensor> getSensorsNotInstalled() throws SQLException, Pa
 		
 		ResultSet rstype_sensor=null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
-//		Statement st = conn.createStatement();
-//		ResultSet rt = st.executeQuery("SELECT id FROM room where id = '" + sensor.getFk_room() + "'");
-//		rt.next();
-//		int fk_room = rt.getInt("id");
-//		
-//		rt.close();
-//		st.close();
-		
-		
-		
-		
+				
 		String SQL_SELECT = "SELECT * FROM  sensor WHERE x IS NULL AND y IS NULL AND installed IS FALSE";
 		try {
 		
