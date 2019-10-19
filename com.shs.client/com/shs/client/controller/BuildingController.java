@@ -243,8 +243,6 @@ public class BuildingController {
 		
 	}
 	
-	
-	
 
 	public static void setBuilding(Building building) {
 		BuildingController.building = building;
