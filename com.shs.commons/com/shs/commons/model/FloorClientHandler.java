@@ -22,7 +22,7 @@ public class FloorClientHandler {
 	private int port = ServerAccess.getPORT_SERVER();
 	private String adress =ServerAccess.getSERVER();
 	
-	//request json from client towards server  to retrieve Floo 
+	//request json from client towards server  to retrieve list of Floor
 	public FloorClientHandler() throws UnknownHostException, IOException {
 		gson = new Gson();
 	}
