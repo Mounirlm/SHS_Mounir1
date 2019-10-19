@@ -1,5 +1,6 @@
 package com.shs.commons.model;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -8,12 +9,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.shs.commons.model.Sensor;
 import com.shs.commons.model.Wing_Room;
+import com.shs.server.model.SensorManager;
 
 public class SensorClientHandler {
 	private Socket server;
@@ -41,7 +45,7 @@ public class SensorClientHandler {
 	public void stopFlux() throws IOException {
         try{
         	reader.close();
-	        writer.close();
+        	writer.close();
 	        server.close();}
         catch(IOException e) {
         	throw new IOException("Error closed flux "+e);
@@ -551,5 +555,118 @@ public class SensorClientHandler {
 	    finally {
 	    	stopFlux();
 	    }
+	}
+	
+	public ArrayList<Sensor> selectSensorsNotInstalled() throws IOException {
+		//connections
+     	getFlux();
+     	ArrayList<Sensor> list=new ArrayList<Sensor>(); 
+		try {
+			//Type class
+			String request="selectNotInstalled-Sensor";
+			
+			//Creation request Json
+		    writer.setIndent("	");
+		    writer.beginObject();
+		    writer.name("request").value(request);
+		    writer.endObject();
+		    writer.flush();
+		    System.out.println("request:"+request+"\n");
+		    //response
+		  //response
+		    reader.beginObject();
+		    while (reader.hasNext()) {
+			    String name= reader.nextName();
+			    if(name.equals("null")) {
+			    	System.out.println(reader.nextString());
+			    }else {
+				   String objectJson=reader.nextString();
+				   	list.add(new Gson().fromJson(objectJson, Sensor.class));
+				 }
+		    }
+		    reader.endObject();
+		    System.out.println(list);
+		    return list;
+		    
+		    
+	      } 
+	    catch (IOException ioe) { 
+	    	throw new IOException("Error communication to server ");
+		}
+	    finally {
+	    	stopFlux();
+	    }
+	}
+	
+	public String insertSensorInStockToServer(Sensor sensor)throws IOException  {
+		//connections
+     	getFlux();
+		try {
+			String request = "create-Sensor";
+			
+			//Creation request Json for server
+		    writer.setIndent("	");
+		    writer.beginObject();
+		    writer.name("request").value(request);
+		    writer.name("object").value(gson.toJson(sensor));
+		    writer.endObject();
+		    writer.flush();//send to server
+		    System.out.println("client :request:"+request+"\n object"+gson.toJson(sensor));
+		   
+		    //response from server
+		    reader.beginObject();
+		    String response = "Server "+reader.nextName()+": "+reader.nextString();
+		    System.out.println(response);
+		    reader.endObject();
+		    return response;
+	      } 
+	    catch (IOException ioe) { 
+	    	throw new IOException("Error communication to server ");
+		}
+	    finally {
+	    	//stop connections
+	    	stopFlux();
+	    }
+	} 
+	
+	public String up_dateSensorToServer(Sensor s) throws IOException {
+		//connections
+     	
+     	
+		try {getFlux();
+			//Type class
+			String request = "uPdate-Sensor";
+			
+			
+	     	//Creation request Json
+		    writer.setIndent("	");
+		    writer.beginObject();
+		    writer.name("request").value(request);
+		    writer.name("object").value(gson.toJson(s));
+		    writer.endObject();
+		    writer.flush();
+		    System.out.println("request:"+request+"\n object: "+gson.toJson(s));
+		    //response
+		    
+		    reader.beginObject();
+		    reader.nextName();
+		    String response = reader.nextString();
+		    reader.endObject();System.out.println("Server response: "+response);
+			
+			return response;
+		
+		    
+			
+	      }
+	    catch (IOException ioe) { 
+	    	throw new IOException("Error communication to server ");
+	    	
+		}
+	    finally {
+	    	//stop connection
+	    	stopFlux();
+	    }
+	
+		
 	}
 }
