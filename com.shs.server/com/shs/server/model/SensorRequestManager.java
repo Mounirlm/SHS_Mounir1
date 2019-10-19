@@ -70,6 +70,23 @@ public class SensorRequestManager {
 			    	error="Error delete all "+e;
 			    }				
 				break;	
+			case "create-Sensor":
+				try{
+					response=SensorManager.createSensor(sensor);
+				}
+			    catch(SQLException e) {
+			    	error="Error creation "+e;
+			    }
+				break;	
+			case "uPdate-Sensor":
+					try{
+						response=SensorManager.updateSensor2(sensor);
+						
+					}
+				    catch(SQLException e) {
+				    	error="Error up_dating "+e;
+				    }
+					break;
 			case "select-Sensor":
 					Sensor sendSensor=null;
 					try{
@@ -135,15 +152,31 @@ public class SensorRequestManager {
 					error+=" and Date Parse error "+e;
 				}	
 				}	
-				
+				else if (request.startsWith("selectNotInstalled-Sensor")) {
+					try{
+						List<Sensor> sensors;
+						sensors= SensorManager.getSensorsNotInstalled();
+						
+						writer.beginObject();
+						if(!sensors.isEmpty()) {
+							response=true;
+							Gson gson = new Gson();
+							for (Sensor sensor : sensors) {
+								writer.name("sensor").value(gson.toJson(sensor));
+							}
+						}else {
+							writer.name("null").value("null");	
+						}
+						writer.endObject();
+					}catch(SQLException e) {
+			        	error="Error select notInstalled "+e;
+			        }	
+				}	
 				else if(request.startsWith("selectRoom-Sensor")) {
 					try{
+						
 						List<Sensor> sensors =new ArrayList<Sensor>();
-						
-						
-							
 						sensors=SensorManager.getSensorsInRoom(Integer.valueOf(res[2]));
-						
 						writer.beginObject();
 						if(!sensors.isEmpty()) {
 							response=true;
@@ -159,6 +192,8 @@ public class SensorRequestManager {
 			        	error="Error select sensor in room  "+e;
 			        }	
 				}
+				
+				
 				
 				else if(request.startsWith("countByFloor-Sensor")) {
 					response=true;
@@ -188,7 +223,7 @@ public class SensorRequestManager {
 			message=request+"-failed: "+error;
 		
 		//Creation response Json
-		if(!res[0].equals("select") && !res[0].equals("selectAll") && !res[0].startsWith("count")&& !res[0].startsWith("selectPosition")&& !res[0].startsWith("selectRoom")) {
+		if(!res[0].equals("select") && !res[0].equals("selectAll") && !res[0].startsWith("count")&& !res[0].startsWith("selectPosition")&& !res[0].startsWith("selectRoom")&& !res[0].startsWith("selectNotInstalled")) {
 			writer.beginObject();
 			writer.name("response").value(message);
 			writer.endObject();	
