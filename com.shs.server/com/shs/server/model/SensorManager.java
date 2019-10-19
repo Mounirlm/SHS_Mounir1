@@ -9,6 +9,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.shs.commons.model.Sensor;
 import com.shs.commons.model.Type_Room;
@@ -272,7 +274,7 @@ public class SensorManager {
 
 			while(RS.next()) {
 				rswing_room=Stmt2.executeQuery("SELECT * FROM wing_room ");
-				rstype_sensor=Stmt3.executeQuery("SELECT * FROM type_sensor");
+				rstype_sensor=Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id="+RS.getInt("fk_type_sensor"));
 				rsroom=Stmt4.executeQuery("SELECT * FROM room ");
 				rsfloor=Stmt5.executeQuery("SELECT * FROM floor_map");
 				rstype_room=Stmt6.executeQuery("SELECT * FROM type_room");
@@ -327,7 +329,6 @@ public class SensorManager {
 		}
 		return sensorsList;
 	}
-	
 	// get all sensors by Romm id
 	public static ArrayList<Sensor> getSensorsInRoom(int idRoom) throws SQLException, ParseException{
 		
@@ -350,17 +351,27 @@ public class SensorManager {
 		while (RS.next()) {
 			
 			rswing_room=Stmt2.executeQuery("SELECT * FROM wing_room ");
-			rstype_sensor=Stmt3.executeQuery("SELECT * FROM type_sensor");
+			rstype_sensor=Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id="+RS.getInt("fk_type_sensor"));
 			
 			if ( rswing_room.next()  && rstype_sensor.next()){
 			
 			Room room = new Room();
-			room.setId(idRoom);
+			
+			for (Room r : RoomManager.getAllRoomsWithPostion())
+			{
+				if (r.getId()==idRoom) {
+					
+					room=r;
+					System.out.println(room);
+					
+				}
+			}
 			
 			
 			sensorsList.add(new Sensor(RS.getInt("id"),RS.getString("sensor_name"), RS.getString("ip_address"), RS.getString("mac_address"),
 					dateFormat.parse(RS.getString("date_setup")), RS.getBoolean("status"), RS.getBoolean("installed"),
-					new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
+					null,
+					//new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
 					RS.getFloat("price"),
 					room,
 					new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
@@ -392,4 +403,146 @@ public class SensorManager {
 		return sensorsList;
 	}
 	
+	
+	
+	
+public static ArrayList<Sensor> getSensorsNotInstalled() throws SQLException, ParseException{
+		
+		Statement Stmt = conn.createStatement();
+		
+		Statement Stmt3 = conn.createStatement();
+		
+		
+		ArrayList<Sensor> sensorsList = new ArrayList<Sensor>();
+		ResultSet RS=null;
+		
+		ResultSet rstype_sensor=null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+//		Statement st = conn.createStatement();
+//		ResultSet rt = st.executeQuery("SELECT id FROM room where id = '" + sensor.getFk_room() + "'");
+//		rt.next();
+//		int fk_room = rt.getInt("id");
+//		
+//		rt.close();
+//		st.close();
+		
+		
+		
+		
+		String SQL_SELECT = "SELECT * FROM  sensor WHERE x IS NULL AND y IS NULL AND installed IS FALSE";
+		try {
+		
+	    RS = Stmt.executeQuery(SQL_SELECT);
+		
+		while (RS.next()) {
+			
+			
+			rstype_sensor=Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id="+RS.getInt("fk_type_sensor"));
+			
+			if (  rstype_sensor.next()){
+			
+			sensorsList.add(new Sensor(RS.getInt("id"),RS.getString("sensor_name"), RS.getString("ip_address"), RS.getString("mac_address"),
+					null, RS.getBoolean("status"), RS.getBoolean("installed"),
+					null,
+					RS.getFloat("price"),
+					null,
+					new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
+							rstype_sensor.getInt("trigger_point_min"),rstype_sensor.getInt("trigger_point_max"),
+							rstype_sensor.getInt("nb_alerts")),
+					RS.getInt("scope_sensor"),RS.getInt("x"),RS.getInt("y")));
+			 }	
+        			
+		 }
+	 }   
+	finally {
+		// Closing
+		
+		if(RS!=null)
+			try{RS.close();}catch(Exception e){e.printStackTrace();} 
+		if(rstype_sensor!=null)
+			try{rstype_sensor.close();}catch(Exception e){e.printStackTrace();} 
+		
+		if(Stmt!=null)
+			try{Stmt.close();}catch(Exception e){e.printStackTrace();} 
+		 
+		if(Stmt3!=null)
+			try{Stmt3.close();}catch(Exception e){e.printStackTrace();} 
+		
+			}		
+		
+		return sensorsList;
+	}
+public static boolean createSensor(Sensor sensor) throws SQLException{
+
+	
+	try {
+	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+	String sql = "INSERT INTO Sensor (sensor_name, ip_address, mac_address, date_setup, status, installed, fk_position, price, fk_room, fk_type_sensor, scope_sensor,x,y) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?,?)";
+	int n=0;
+	
+	PreparedStatement preparedstatement = conn.prepareStatement(sql);
+	preparedstatement.setObject(1, sensor.getSensor_name());
+	preparedstatement.setObject(2, null);
+	preparedstatement.setObject(3,  null);
+	preparedstatement.setObject(4, sensor.getDate_setup_formatted());
+	preparedstatement.setObject(5, true);
+	preparedstatement.setObject(6, true);
+	preparedstatement.setObject(7, 1);
+	preparedstatement.setObject(8, null);
+	preparedstatement.setObject(9, sensor.getFk_room().getId());
+	preparedstatement.setObject(10, sensor.getFk_type_sensor().getId());
+	preparedstatement.setObject(11, 10);
+	preparedstatement.setObject(12, sensor.getX());
+	preparedstatement.setObject(13, sensor.getY());
+	
+	System.out.println(preparedstatement);
+	n = preparedstatement.executeUpdate();
+	
+	
+	preparedstatement.close();
+	return n==1;
+	}catch(SQLException e) {
+		e.printStackTrace();
+	}
+	return false;
+}
+
+
+  
+	public static boolean updateSensor2(Sensor sensor)throws SQLException  {
+
+		 
+		 try {
+
+	
+		 PreparedStatement pstmt = null;
+		 
+		 int n=0;
+		 
+		 
+		 pstmt = conn.prepareStatement("UPDATE sensor SET installed = ? , fk_room= ?, x= ?, y= ? ,date_setup = ? WHERE id = ? ");
+		 
+		 System.out.println(sensor.getFk_room_id());
+		 	 
+			 pstmt.setBoolean(1, sensor.getInstalled());
+			 pstmt.setObject(2, (Integer) sensor.getFk_room_id());
+			 pstmt.setObject(3, (Integer) sensor.getX());
+			 pstmt.setObject(4, (Integer)sensor.getY());
+			 pstmt.setString(5, sensor.getDate_setup_formatted());
+			 pstmt.setObject(6,(Integer) sensor.getId());
+			
+			 System.out.println(pstmt);
+			 
+			 n = pstmt.executeUpdate();
+		     
+			 pstmt.close();
+			 return n==1;
+		 	}catch(SQLException e) {
+		 		e.printStackTrace();
+		 	}
+		return false;
+		
+      }
 }
