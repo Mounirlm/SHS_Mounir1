@@ -32,6 +32,7 @@ import com.shs.commons.model.Resident;
 import com.shs.commons.model.Room;
 import com.shs.commons.model.Sensor;
 import com.shs.commons.model.Type_Room;
+import com.shs.commons.model.Type_Sensor;
 import com.shs.commons.model.User;
 import com.shs.server.connection.pool.AccessConfig;
 import com.shs.server.connection.pool.DataSource;
@@ -81,9 +82,9 @@ public class RequestHandler implements Runnable {
 		//Communication Json
 		try {
 			System.out.println("Thread:"+num+" "+requestHandler(reader));
-			if(!taskBrokenSensors.isAlive()) {
-				taskBrokenSensors.start();
-			}
+//			if(!taskBrokenSensors.isAlive()) {
+//				taskBrokenSensors.start();
+//			}
 		} catch (IOException e) {
 			System.out.println("Error communication to client "+e);
 		} catch (SQLException e) {
@@ -130,7 +131,8 @@ public class RequestHandler implements Runnable {
 					object = new Gson().fromJson(objectJson, Building.class);
 				if(className.equals("Floor"))
 					object = new Gson().fromJson(objectJson, Floor.class);
-				
+				if(className.equals("Type_Sensor"))
+					object = new Gson().fromJson(objectJson, Type_Sensor.class);
 
 
 			}else {
