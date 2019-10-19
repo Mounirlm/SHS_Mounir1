@@ -368,5 +368,75 @@ public class RoomManager {
         
 	}
 	
+public static ArrayList<Room> getAllRoomsWithPostion() throws SQLException {
+		
+		
+		Statement Stmt = conn.createStatement();
+		Statement Stmt2 = conn.createStatement();
+		Statement Stmt3 = conn.createStatement();
+		Statement Stmt4 = conn.createStatement();
+		Statement Stmt5 = conn.createStatement();
+
+		
+		ResultSet RS=null;
+		ResultSet rstype_room=null;
+		ResultSet rswing_room=null;
+		ResultSet rsfloor =null;
+		ResultSet rsbuilding =null;
+
+		
+		ArrayList<Room> roomList = new ArrayList<Room>();
+		
+		RS = Stmt.executeQuery("SELECT * FROM room");
+		 
+		try {
+		while(RS.next()) {
+			rstype_room=Stmt2.executeQuery("SELECT * FROM type_room where id="+RS.getInt("fk_type_room") );
+        	rswing_room=Stmt3.executeQuery("SELECT * FROM wing_room where id="+RS.getInt("fk_wing_room"));
+        	rsfloor=Stmt4.executeQuery("SELECT * FROM floor_map where id="+RS.getInt("fk_floor_map") );
+        	rsbuilding=Stmt5.executeQuery("SELECT * FROM building");
+       	
+      	if ( rstype_room.next() && rswing_room.next()&&rsfloor.next()&& rsbuilding.next()) {
+		
+			
+			
+			roomList.add(new Room(RS.getInt("id"),RS.getInt("floor"), RS.getInt("room_number"), RS.getInt("m2"),
+					new Type_Room(rstype_room.getInt("id"), rstype_room.getString("name")),new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
+        			RS.getInt("nb_doors"), RS.getInt("nb_windows"),RS.getInt("x"),RS.getInt("y"),RS.getInt("width"),RS.getInt("height"),	 
+        			new Floor(rsfloor.getInt("id"),rsfloor.getString("name"),rsfloor.getString("image_path"),
+                			new Building(rsbuilding.getInt("id"),rsbuilding.getString("name"),rsbuilding.getString("type")))));
+			
+    	}
+		}
+		}finally {
+	        // Closing
+				
+			if(RS!=null)
+		        try{RS.close();}catch(Exception e){e.printStackTrace();} 
+			if(rstype_room!=null)
+	        	try{rstype_room.close();}catch(Exception e){e.printStackTrace();} 
+	        if(rswing_room!=null)
+	        	try{rswing_room.close();}catch(Exception e){e.printStackTrace();}
+	        if(rsbuilding!=null)
+	        	try{rstype_room.close();}catch(Exception e){e.printStackTrace();} 
+	        if(rsfloor!=null)
+	        	try{rswing_room.close();}catch(Exception e){e.printStackTrace();}  
+	        if(Stmt!=null)
+	        	try{Stmt.close();}catch(Exception e){e.printStackTrace();} 
+	        if(Stmt2!=null)
+	        	try{Stmt2.close();}catch(Exception e){e.printStackTrace();} 
+	        if(Stmt3!=null)
+	        	try{Stmt3.close();}catch(Exception e){e.printStackTrace();}
+	        if(Stmt4!=null)
+	        	try{Stmt4.close();}catch(Exception e){e.printStackTrace();} 
+	        if(Stmt5!=null)
+	        	try{Stmt5.close();}catch(Exception e){e.printStackTrace();} 
+		    
+		}
+        return roomList;
+        
+	}
+	
+
 	
 }
