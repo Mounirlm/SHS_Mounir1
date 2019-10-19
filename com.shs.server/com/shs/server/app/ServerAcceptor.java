@@ -41,7 +41,7 @@ public class ServerAcceptor {
 						} catch (IOException e) {System.out.println("Error connection client");}
 						cpt++;
 				        System.out.println("Connection established "+cpt);      
-				        //creation RequsetHandlre
+				        //creation RequsetHandler
 				        RequestHandler req = new RequestHandler(client, connDB);
 				        Thread service = new Thread(req);
 				        service.start();
