@@ -46,7 +46,12 @@ public MapView(){
 		public void actionPerformed(ActionEvent e) {
 			
 			MapSHS m =null;
-			m = new MapSHS();
+			try {
+				m = new MapSHS();
+			} catch (Exception e1) {
+				
+				e1.printStackTrace();
+			}
 			m.setVisible(true);
 	
 		}
@@ -57,25 +62,7 @@ public MapView(){
     this.add(jbMap,BorderLayout.CENTER);
 	
 	
-//	try {
-//		
-//		try {
-//			buildingList= new BuildingListView();
-//		} catch (ClassNotFoundException | SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		this.add(buildingList,BorderLayout.CENTER);
-//		
-//	} catch (UnknownHostException e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	} catch (IOException e) {
-//		// TODO Auto-generated catch block
-//		//buildingList = new BuildingListView(null);
-//		e.printStackTrace();
-//	}
-//	
+
 	
 	
 }
