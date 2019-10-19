@@ -12,8 +12,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -42,12 +40,14 @@ public class MapSHS extends JFrame implements IUpdatable{
 	
 	private JList itemsListFloor;
 	private JList itemsListSensor;
+	
 	private JList itemsListStock;
 	
     private JButton addSensorToStock;
+   
     private JLabel StockList;
-	
-	JLabel mapTitle;
+    private JLabel mapTitle;
+    
 	MapPanelView plan;
 	Building building;
 	BuildingController buildingController;
@@ -55,8 +55,11 @@ public class MapSHS extends JFrame implements IUpdatable{
 	Stock stock;
 	
 	
+	public MapSHS(String name) {
+        super(name);
+    }
 	
-	public MapSHS() 
+	public MapSHS() throws Exception 
 	{
 		
 		
@@ -85,6 +88,7 @@ public class MapSHS extends JFrame implements IUpdatable{
 		}
 		
 		plan = new MapPanelView(building);
+		 
 		
 		
 		plan.addUpdatableListener(this);// pattern Observer Observable
@@ -117,13 +121,9 @@ public class MapSHS extends JFrame implements IUpdatable{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				try {
-					FormStockView fs = new FormStockView(building);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				update();
+//				FormStockView fs = new FormStockView(building,-1,-1,-1,-1);
+//				fs.setVisible(true);
+//				update();
 			}
 		});
 		
@@ -161,20 +161,18 @@ public class MapSHS extends JFrame implements IUpdatable{
 					
 					itemsListSensor.setListData(f.getSensors().toArray());
 					plan.setCurrent_floor(f);
-						
+					
 					
 				} catch (IOException e2) {
 					
 					e2.printStackTrace();
 				}
-		        
-				
-
-						
-				
+		    	
 				
 			}
 		});
+        
+        
         
         panW.add(scrollPane);
         
@@ -184,8 +182,6 @@ public class MapSHS extends JFrame implements IUpdatable{
             ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
         panW.add(scrollPane2);
-        
-        
         
         itemsListStock = new JList<Sensor>(building.getStock().getSensorArray());
         JScrollPane scrollPane3 = new JScrollPane(itemsListStock,
@@ -199,6 +195,8 @@ public class MapSHS extends JFrame implements IUpdatable{
         panE.add(StockList);
         panE.add(scrollPane3);
         panE.add(addSensorToStock);
+        
+
        
         
         
@@ -211,17 +209,14 @@ public class MapSHS extends JFrame implements IUpdatable{
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		
+		
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-//		        try {
-//		        	// TODO
-//					//Writer.writeJSON(".//save.json",IHM.this.building);
-//				
-//				} catch (IOException e) {
-//					
-//					e.printStackTrace();
-//				}
+
+		    	
+		          
 		    }
 		});
 		
@@ -237,23 +232,20 @@ public class MapSHS extends JFrame implements IUpdatable{
 		return d;
 	}
 
-
+	
 	
 	// MapSHS implements IUpdatable
-	public void update() 
+	public void update()  
 	{
-		itemsListStock.setListData(building.getStock().getSensorArray());
 		
 		Floor f = (Floor)itemsListFloor.getSelectedValue();
+		
 		itemsListSensor.setListData(f.getSensors().toArray());
 		
-		for(Sensor s : f.getSensors())
-		{
-			s.setInstalled(true);
-			s.setDate_setup(this.getDate());
-			//System.out.println (s.getDate_setup());	
-		}
+		itemsListStock.setListData(building.getStock().getSensorArray());
 		
-		
+    	
 	}
+
 }
+
