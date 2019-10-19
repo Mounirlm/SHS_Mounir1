@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 public class Sensor implements Transferable {
-	private int id;
+	private Integer id;
 	private String sensor_name;
 	private String ip_address;
 	private String mac_address;
@@ -28,6 +28,7 @@ public class Sensor implements Transferable {
 	private Integer x;
 	private Integer y;
 	
+	private Integer fk_room_id;
 	private Room room;
 	
 	//transferable : Classe qui permet a des composants swing d'échanger des transferables  par Dragndrop
@@ -39,7 +40,7 @@ public class Sensor implements Transferable {
 		// TODO Auto-generated constructor stub
 	}	
 	
-	public Sensor(int id, String sensor_name, String ip_address, String mac_address, Date date_setup, Boolean status,
+	public Sensor(Integer id, String sensor_name, String ip_address, String mac_address, Date date_setup, Boolean status,
 			Boolean installed, Wing_Room fk_position, Float price, Room fk_room, Type_Sensor fk_type_sensor,
 			Integer scope_sensor) {
 		super();
@@ -59,9 +60,9 @@ public class Sensor implements Transferable {
 		
 	}
     
-	public Sensor(int id, String sensor_name, String ip_address, String mac_address, Date date_setup, Boolean status,
+	public Sensor(Integer id, String sensor_name, String ip_address, String mac_address, Date date_setup, Boolean status,
 			Boolean installed, Wing_Room fk_position, Float price, Room fk_room, Type_Sensor fk_type_sensor,
-			Integer scope_sensor,int x,int y) {
+			Integer scope_sensor,Integer x,Integer y) {
 		super();
 		this.id = id;
 		this.sensor_name = sensor_name;
@@ -80,10 +81,37 @@ public class Sensor implements Transferable {
 		
 	}
 	
-	public int getId() {
+	public Sensor(Integer id, String sensor_name, String ip_address, String mac_address, Date date_setup, Boolean status,
+			Boolean installed, Wing_Room fk_position, Float price, Type_Sensor fk_type_sensor,
+			Integer scope_sensor,Integer x,Integer y) {
+		super();
+		this.id = id;
+		this.sensor_name = sensor_name;
+		this.ip_address = ip_address;
+		this.mac_address = mac_address;
+		this.date_setup = date_setup;
+		this.status = status;
+		this.installed = installed;
+		this.fk_position = fk_position;
+		this.price = price;
+		this.fk_type_sensor = fk_type_sensor;
+		this.scope_sensor = scope_sensor;
+		this.x=x;
+		this.y=y;
+		
+	}
+	
+	public Sensor(Boolean installed,Integer x,Integer y) {
+		this.installed = installed;
+		
+		this.x=x;
+		this.y=y;
+	}
+	
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getSensor_name() {
@@ -157,10 +185,9 @@ public class Sensor implements Transferable {
 	
 	public String getDate_setup_formatted() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		return dateFormat.format(date_setup);
+		return date_setup == null ? null : dateFormat.format(date_setup);
+		
 	}
-	
-	
 	
 
 	public Object[] getAsArray() {
@@ -187,40 +214,50 @@ public class Sensor implements Transferable {
 	
 	//Les données glissées sont identifiées par des données de type DataFlavor
 	
-		public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
 			
-			if (!isDataFlavorSupported(flavor)) {
+		if (!isDataFlavorSupported(flavor)) {
 				throw new UnsupportedFlavorException(flavor);
 				}
 		     return this;
 			
-		}
+	}
 
-		public DataFlavor[] getTransferDataFlavors() 
-		{
+	public DataFlavor[] getTransferDataFlavors() 
+	{
 			DataFlavor[] flavors = new DataFlavor[1];
 			flavors[0]= SENSOR_DATA_FLAVOR;
 			return flavors;
-		}
+	}
 
-		public boolean isDataFlavorSupported(DataFlavor flavor) 
-		{
+	public boolean isDataFlavorSupported(DataFlavor flavor) 
+	{
 			return(flavor.equals(SENSOR_DATA_FLAVOR));
-		}
+	}
 
-		public Room getRoom() {
-			return room;
-		}
-
-		public void setRoom(Room room) {
-			this.room = room;
-		}
+	public Room getRoom() {
+		return room;
+	}
 	
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "Sensor [id=" + id 
+				+ ", fk_room=" + fk_room 
+				+", fk_type_sensor=" + fk_type_sensor + "]";
+	}
 
-		@Override
-		public String toString() {
-			return "Sensor [id=" + id + ", sensor_name=" + sensor_name +  ", status=" + status + ", fk_type_sensor=" + fk_type_sensor +"]";
-		}
+	public Integer getFk_room_id() {
+		return fk_room_id;
+	}
+
+	public void setFk_room_id(Integer  fk_room_id) {
+		this.fk_room_id = fk_room_id;
+	}
 
 	
 	
