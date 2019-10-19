@@ -1,13 +1,14 @@
 package com.shs.client.controller;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.shs.client.model.RoomClientHandler;
-import com.shs.client.view.AnalyzeView;
+import com.shs.client.view.FormStockView;
+import com.shs.client.view.IUpdatable;
+import com.shs.client.view.MapPanelView;
 import com.shs.client.view.MapView;
 import com.shs.client.view.SHSView;
 import com.shs.commons.model.Building;
@@ -16,6 +17,7 @@ import com.shs.commons.model.Floor;
 import com.shs.commons.model.FloorClientHandler;
 import com.shs.commons.model.Room;
 import com.shs.commons.model.Sensor;
+import com.shs.commons.model.SensorClientHandler;
 import com.shs.commons.model.Type_Sensor;
 
 public class BuildingController {
@@ -29,16 +31,23 @@ public class BuildingController {
 	private static SensorController     sensorService;
 	private static TypeSensorController  typeSensorService;
 	
-	private  Building building;
+	private static SensorClientHandler sc;
+	
+		
+	private static  Building building;
 	private  Floor    floor;
 	private  Sensor    sensor;
 	private  Room      room;
 		
-	
+	private static MapPanelView mp;
 	private SHSView view;
+	
+	FormStockView fs= null;
+	
+	
     
 
-	public BuildingController() throws  IOException, ClassNotFoundException, SQLException {
+	public BuildingController() throws  Exception {
 		this.view=view;
 		
 		//mapView = view.getpApp().getMapView();
@@ -49,18 +58,19 @@ public class BuildingController {
 		
 		
 		
+		mp= new MapPanelView(building);
+		
 		buildingService = new BuildingClientHandler();
 		floorService = new FloorClientHandler();
 		roomService =new RoomClientHandler();
 		sensorService= new SensorController();
 		typeSensorService =new TypeSensorController();
+		sc=new SensorClientHandler();
 		
 		//set building with floorList
 		building.setFloor(floorService.getFloorInBuilding());
-		
-	    
-		
-
+	
+       
 		
 	}
 	// Test if they are several building
@@ -85,13 +95,14 @@ public class BuildingController {
 	// Return list of floor belonging to a building
 	
 	public static List<Floor> getBuildingFloorList() throws IOException
-		{	
+	{	
 			    
-			    
-				return  floorService.getFloorInBuilding();
-		}
+		   return  floorService.getFloorInBuilding();
+	}
 	
-	public void BuildingFloorList() throws IOException {
+	
+	public void BuildingFloorList() throws IOException 
+	{
 		
 		building.setFloor(getBuildingFloorList());
 	}
@@ -102,10 +113,10 @@ public class BuildingController {
 		    Integer id=null;
 			
 			
-			   for(Floor f: getBuildingFloorList())
-			   {
-				    if (f==fl)  	id=f.getId();	   
-			   }
+		    for(Floor f: getBuildingFloorList())
+			 {
+				   if (f==fl)  id=f.getId();	   
+			 }
 			   
 			  return id;
 		}
@@ -129,6 +140,9 @@ public class BuildingController {
 		  return floor;
 	}
 	
+	
+	
+	
 	//At this case we have one floor, so this method return only rooms belonging to this floor (id=1).
 	
 	public static List<Room>getRoomListInFloor(int idFloor) throws IOException 
@@ -139,12 +153,8 @@ public class BuildingController {
 	
 		for (Room r : roomService.selectRoomsWithPosition(idFloor))
 		{
-			 room.setFk_floor(r.getFk_floor());
-			 room.setHeight(r.getHeight());
-			 room.setWidth(r.getWidth());
-			 room.setX(r.getX());
-			 room.setY(r.getY());
-			 
+
+			 room=r;
 			 rooms.add(room);
 		  
 		}
@@ -153,18 +163,31 @@ public class BuildingController {
 		     
 	}
 	
+	public static Room getRoom (int idRoom, int idFloor) throws IOException {
+		
+	    Room rSearch=null;
+		for (Room r : roomService.selectRoomsWithPosition(idFloor))
+		{
+			if (idRoom== r.getId())
+			{
+				  rSearch=r; break;
+			}
+		}
+		
+	  return  rSearch;
+	}
 	// Method which returns the sensor associated to room
 	
-	public List <Sensor> getSensorWithPosition () throws IOException 
+	public static List <Sensor> getSensorWithPosition () throws IOException 
 	{
        
 		  return sensorService.getAllSensorsWithPosition();
 				
 	}
 	
-	public List<Type_Sensor> getSensorTypeList () throws IOException, SQLException {
+	public static List<Type_Sensor> getSensorTypeList () throws IOException, SQLException {
 		
-		for (Sensor s :  this.getSensorWithPosition()){
+		for (Sensor s :  getSensorWithPosition()){
 		 
 			for(Type_Sensor ts : typeSensorService.getSensorType()) {
 			
@@ -176,10 +199,15 @@ public class BuildingController {
 		  
 	}
 	
-	public static Type_Sensor getSensorType(String name) throws IOException{
+	public static Type_Sensor getSensorTypeByName(String name) throws IOException, SQLException{
 		 
-		 		 
-		 return typeSensorService.getSensorType(name);
+		
+		 for (Type_Sensor ts : typeSensorService.getSensorType()) {
+			 
+			 if(name.equals(ts.getName())) return ts;
+				 
+		 }
+		 return null;
 		 
 	 }
 	
@@ -209,25 +237,42 @@ public class BuildingController {
 	
 	public static List <Sensor> getSensorsNotInstalled () throws IOException 
 	{
-//		   Sensor sensor = new Sensor();
-//		   ArrayList<Sensor> sensors = new ArrayList<Sensor>();
-//		   for (Sensor s :  sensorService.getSensorsNotInstalled()) 
-//		   {
-//			   sensor.setId(s.getId());
-//			   sensor.setInstalled(s.getInstalled());
-//			   sensor.setFk_type_sensor(s.getFk_type_sensor());
-//			   sensor.setX(s.getX());
-//			   sensor.setY(s.getY());
-//			   
-//			   if (sensor.getInstalled()==false && sensor.getX()==null && sensor.getY()==null)  sensors.add(sensor);
-//		   }
+
 			
 		  return sensorService.getSensorsNotInstalled();
 	}
 	
+	public static String update(Sensor s) throws IOException, SQLException {
+			
+		return  sensorService.update(s);
+		
+	}
 	
-	 
+	public static String create(Sensor s) throws IOException, SQLException {
+		
+		return  sensorService.create(s);
+		
+	}
+	
+	
+	
+
+	public static void setBuilding(Building building) {
+		BuildingController.building = building;
+	}
+	
+		
+
+	
+	
+	
+
+
+}
+	
+	
+	
 	 
 		
 	 
-}
+
