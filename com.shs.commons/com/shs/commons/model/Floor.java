@@ -72,11 +72,12 @@ public class Floor {
 		return ret;
 	}
 
-	public void setSensors(ArrayList<Sensor> arrayList) {
+	public  void setSensors(ArrayList<Sensor> arrayList) {
 		ret = arrayList;
 	}
 	
 	public static Sensor[] getSensorsArray(ArrayList<Sensor> sensors2) {
+		
 		Sensor[] sArray=new Sensor[sensors2.size()];
 		for (int i=0; i<sensors2.size();i++)
 		{
