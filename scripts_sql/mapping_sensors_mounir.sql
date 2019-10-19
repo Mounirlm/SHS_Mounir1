@@ -81,7 +81,7 @@ create table sensor(
 	sensor_name varchar(25),
 	ip_address varchar(25) UNIQUE,
 	mac_address varchar(25) UNIQUE,
-	date_setup date,
+	date_setup varchar(30),
 	status boolean,
 	installed boolean,
 	fk_position integer,
@@ -172,7 +172,7 @@ insert into wing_room (name) values ('SOUTH-WEST');
 insert into building(name,type) values('Residence-1','building');
 											 
 
-insert into floor_map(name,image_path,fk_building) values('floor1','C:\Users\mounp\git\repository\SHS_AJAP\ressources\floor1.png',1);
+insert into floor_map(name,image_path,fk_building) values('floor1','.\ressources\floor1.png',1);
 
 
 
@@ -205,11 +205,11 @@ insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, n
  
 
 /* TYPE SENSORS*/	
-insert into type_sensor (name, trigger_point_min, trigger_point_max, nb_alerts) values ('smoke_sensor', null, 500, 3);
+insert into type_sensor (name, trigger_point_min, trigger_point_max, nb_alerts) values ('smoke_sensor', 0, 500, 3);
 insert into type_sensor (name, trigger_point_min, trigger_point_max, nb_alerts) values ('temperature_sensor', 10, 24, 3);
 insert into type_sensor (name, trigger_point_min, trigger_point_max, nb_alerts) values ('door_sensor', 6, 21, 1);
 insert into type_sensor (name, trigger_point_min, trigger_point_max, nb_alerts) values ('window_sensor', 6, 21, 1);
-insert into type_sensor (name, trigger_point_min, trigger_point_max, nb_alerts) values ('fall_sensor', null, 1, 2);
+insert into type_sensor (name, trigger_point_min, trigger_point_max, nb_alerts) values ('fall_sensor', 0, 1, 2);
 
 /*Stock*/
 insert into sensor (sensor_name, ip_address, mac_address, date_setup,status, installed, fk_position,price,fk_room, fk_type_sensor, scope_sensor,x,y)
