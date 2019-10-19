@@ -50,14 +50,10 @@ public class BuildingController {
 	public BuildingController() throws  Exception {
 		this.view=view;
 		
-		//mapView = view.getpApp().getMapView();
-		
 		building = new Building();
 		Room room= new Room();
 		floor=new Floor();
-		
-		
-		
+				
 		mp= new MapPanelView(building);
 		
 		buildingService = new BuildingClientHandler();
@@ -220,25 +216,18 @@ public class BuildingController {
 		
 		while (cpt<rooms.size())
 		{			
-			 
-			System.out.println("toto");
-			
 			rooms.get(cpt).setSensors(sensorService.getSensorsInRoom(rooms.get(cpt).getId()));
 			System.out.println(rooms.get(cpt));
-			System.out.println( "toti");
 			cpt++;
 		}
 		
 	    f.setRoom(rooms);
-		
-		
 	}
 	
 	
 	public static List <Sensor> getSensorsNotInstalled () throws IOException 
 	{
-
-			
+	
 		  return sensorService.getSensorsNotInstalled();
 	}
 	
