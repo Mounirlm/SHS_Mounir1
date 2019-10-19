@@ -2,4 +2,3 @@ Manifest-Version: 1.0
 Main-Class: com.blueone.app.Main
 Class-Path: ./ressources/postgresql-42.2.2.jre7.jar
 Class-Path: ./ressources/gson-2.8.5.jar
-./MyRessources/db.properties
