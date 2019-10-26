@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_231"/>
 	<classpathentry kind="src" path="com.shs.client"/>
 	<classpathentry kind="src" path="com.shs.server"/>
 	<classpathentry kind="src" path="com.shs.commons"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_231"/>
 	<classpathentry exported="true" kind="lib" path="ressources/gson-2.8.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="ressources/postgresql-42.2.2.jre7.jar"/>
 	<classpathentry kind="output" path="bin"/>
