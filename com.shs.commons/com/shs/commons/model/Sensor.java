@@ -60,7 +60,7 @@ public class Sensor implements Transferable {
 		
 	}
     
-	public Sensor(Integer id, String sensor_name, String ip_address, String mac_address, Date date_setup, Boolean status,
+	public Sensor(Integer id, String sensor_name, String ip_address, String mac_address, Boolean status,
 			Boolean installed, Wing_Room fk_position, Float price, Room fk_room, Type_Sensor fk_type_sensor,
 			Integer scope_sensor,Integer x,Integer y) {
 		super();
@@ -68,7 +68,7 @@ public class Sensor implements Transferable {
 		this.sensor_name = sensor_name;
 		this.ip_address = ip_address;
 		this.mac_address = mac_address;
-		this.date_setup = date_setup;
+	
 		this.status = status;
 		this.installed = installed;
 		this.fk_position = fk_position;
@@ -81,7 +81,7 @@ public class Sensor implements Transferable {
 		
 	}
 	
-	public Sensor(Integer id, String sensor_name, String ip_address, String mac_address, Date date_setup, Boolean status,
+	public Sensor(Integer id, String sensor_name, String ip_address, String mac_address, Boolean status,
 			Boolean installed, Wing_Room fk_position, Float price, Type_Sensor fk_type_sensor,
 			Integer scope_sensor,Integer x,Integer y) {
 		super();
@@ -89,7 +89,7 @@ public class Sensor implements Transferable {
 		this.sensor_name = sensor_name;
 		this.ip_address = ip_address;
 		this.mac_address = mac_address;
-		this.date_setup = date_setup;
+		
 		this.status = status;
 		this.installed = installed;
 		this.fk_position = fk_position;

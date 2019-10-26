@@ -81,7 +81,6 @@ public class SensorRequestManager {
 			case "uPdate-Sensor":
 					try{
 						response=SensorManager.updateSensor2(sensor);
-						
 					}
 				    catch(SQLException e) {
 				    	error="Error up_dating "+e;
@@ -141,6 +140,7 @@ public class SensorRequestManager {
 						Gson gson = new Gson();
 						for (Sensor sensor : sensors) {
 							writer.name("sensor").value(gson.toJson(sensor));
+							;
 						}
 					}else {
 						writer.name("null").value("null");	

@@ -290,7 +290,7 @@ public class SensorManager {
 					
 					
 					sensorsList.add(new Sensor(RS.getInt("id"),RS.getString("sensor_name"), RS.getString("ip_address"), RS.getString("mac_address"),
-							dateFormat.parse(RS.getString("date_setup")), RS.getBoolean("status"), RS.getBoolean("installed"),
+						    RS.getBoolean("status"), RS.getBoolean("installed"),
 							new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
 							RS.getFloat("price"),
 							new Room(rsroom.getInt("id"),rsroom.getInt("floor"), rsroom.getInt("room_number"), rsroom.getInt("m2"),
@@ -369,7 +369,7 @@ public class SensorManager {
 			
 			
 			sensorsList.add(new Sensor(RS.getInt("id"),RS.getString("sensor_name"), RS.getString("ip_address"), RS.getString("mac_address"),
-					dateFormat.parse(RS.getString("date_setup")), RS.getBoolean("status"), RS.getBoolean("installed"),
+					 RS.getBoolean("status"), RS.getBoolean("installed"),
 					null,
 					//new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
 					RS.getFloat("price"),
@@ -432,7 +432,7 @@ public static ArrayList<Sensor> getSensorsNotInstalled() throws SQLException, Pa
 			if (  rstype_sensor.next()){
 			
 			sensorsList.add(new Sensor(RS.getInt("id"),RS.getString("sensor_name"), RS.getString("ip_address"), RS.getString("mac_address"),
-					null, RS.getBoolean("status"), RS.getBoolean("installed"),
+					RS.getBoolean("status"), RS.getBoolean("installed"),
 					null,
 					RS.getFloat("price"),
 					null,
@@ -468,23 +468,23 @@ public static boolean createSensor(Sensor sensor) throws SQLException{
 	try {
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
-	String sql = "INSERT INTO Sensor (sensor_name, ip_address, mac_address, date_setup, status, installed, fk_position, price, fk_room, fk_type_sensor, scope_sensor,x,y) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?,?)";
+	String sql = "INSERT INTO Sensor (sensor_name, ip_address, mac_address, status, installed, fk_position, price, fk_room, fk_type_sensor, scope_sensor,x,y) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?)";
 	int n=0;
 	
 	PreparedStatement preparedstatement = conn.prepareStatement(sql);
 	preparedstatement.setObject(1, sensor.getSensor_name());
 	preparedstatement.setObject(2, null);
 	preparedstatement.setObject(3,  null);
-	preparedstatement.setObject(4, sensor.getDate_setup_formatted());
+	//preparedstatement.setObject(4, sensor.getDate_setup_formatted());
+	preparedstatement.setObject(4, true);
 	preparedstatement.setObject(5, true);
-	preparedstatement.setObject(6, true);
-	preparedstatement.setObject(7, 1);
-	preparedstatement.setObject(8, null);
-	preparedstatement.setObject(9, sensor.getFk_room().getId());
-	preparedstatement.setObject(10, sensor.getFk_type_sensor().getId());
-	preparedstatement.setObject(11, 10);
-	preparedstatement.setObject(12, sensor.getX());
-	preparedstatement.setObject(13, sensor.getY());
+	preparedstatement.setObject(6, 1);
+	preparedstatement.setObject(7, null);
+	preparedstatement.setObject(8, sensor.getFk_room().getId());
+	preparedstatement.setObject(9, sensor.getFk_type_sensor().getId());
+	preparedstatement.setObject(10, 10);
+	preparedstatement.setObject(11, sensor.getX());
+	preparedstatement.setObject(12, sensor.getY());
 	
 	System.out.println(preparedstatement);
 	n = preparedstatement.executeUpdate();
@@ -511,7 +511,7 @@ public static boolean createSensor(Sensor sensor) throws SQLException{
 		 int n=0;
 		 
 		 
-		 pstmt = conn.prepareStatement("UPDATE sensor SET installed = ? , fk_room= ?, x= ?, y= ? ,date_setup = ? WHERE id = ? ");
+		 pstmt = conn.prepareStatement("UPDATE sensor SET installed = ? , fk_room= ?, x= ?, y= ?  WHERE id = ? ");
 		 
 		 System.out.println(sensor.getFk_room_id());
 		 	 
@@ -519,8 +519,8 @@ public static boolean createSensor(Sensor sensor) throws SQLException{
 			 pstmt.setObject(2, (Integer) sensor.getFk_room_id());
 			 pstmt.setObject(3, (Integer) sensor.getX());
 			 pstmt.setObject(4, (Integer)sensor.getY());
-			 pstmt.setString(5, sensor.getDate_setup_formatted());
-			 pstmt.setObject(6,(Integer) sensor.getId());
+			 //pstmt.setString(5, sensor.getDate_setup_formatted());
+			 pstmt.setObject(5,(Integer) sensor.getId());
 			
 			 System.out.println(pstmt);
 			 

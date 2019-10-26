@@ -451,6 +451,7 @@ public class SensorClientHandler {
 		    writer.endObject();
 		    writer.flush();
 		    System.out.println("request:"+request+"\n");
+		    
 		    //response
 		  //response
 		    reader.beginObject();
@@ -462,6 +463,7 @@ public class SensorClientHandler {
 				   String objectJson=reader.nextString();
 				   	list.add(new Gson().fromJson(objectJson, Sensor.class));
 				 }
+			    System.out.println(list);
 		    }
 		    reader.endObject();
 		    System.out.println(list);
@@ -652,6 +654,7 @@ public class SensorClientHandler {
 		    reader.nextName();
 		    String response = reader.nextString();
 		    reader.endObject();System.out.println("Server response: "+response);
+		  
 			
 			return response;
 		
