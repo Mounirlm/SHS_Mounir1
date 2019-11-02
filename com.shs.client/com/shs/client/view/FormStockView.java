@@ -73,13 +73,7 @@ public class FormStockView extends JDialog
 		MapSHS frameSHS;
 		
 		
-		public FormStockView(Building b) {
-			super();
-			this.b = b;
-		}
-
-		
-		public FormStockView(Building b, int x , int  y, int idRoom, int idFloor) 
+		public FormStockView(Building b) 
 		{
 			 super();
 			 this.b = b;
@@ -92,10 +86,7 @@ public class FormStockView extends JDialog
 			 this.setLayout(null);
 			 p1=new JPanel();
 			 
-			this.x=x;
-			this.y=y;
-			this.idRoom=idRoom;
-			this.idFloor=idFloor;
+			
 			
 		    try {
 				sensorService =new SensorController();
