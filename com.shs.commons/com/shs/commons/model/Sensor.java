@@ -247,7 +247,6 @@ public class Sensor implements Transferable {
 	@Override
 	public String toString() {
 		return "Sensor [id=" + id 
-				+ ", fk_room=" + fk_room 
 				+", fk_type_sensor=" + fk_type_sensor + "]";
 	}
 
