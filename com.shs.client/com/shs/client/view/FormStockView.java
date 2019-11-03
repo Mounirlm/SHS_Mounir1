@@ -379,9 +379,9 @@ public class FormStockView extends JDialog
 		   List<Sensor> list=null;
 		   list= b.getStock().getSensors();
 		   System.out.println(list);
-		   int id;	
+		   Integer id;	
 		   String type;
-		   int x,y;
+		   Integer x,y;
 		   Integer idRoom = null;
 		   
 		   
