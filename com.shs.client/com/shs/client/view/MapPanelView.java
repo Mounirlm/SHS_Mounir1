@@ -13,7 +13,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import javax.swing.JPanel;
 
 import com.shs.client.controller.BuildingController;
@@ -192,19 +191,26 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 
 	  Sensor selected = null;
 	  Room roomSelected= null;
+	
+		
+	 
 	  for(Room r : current_floor.getRoom())
+	  {
+			if(r.isPointInRoom(e.getPoint()))
 			{
-					if(r.isPointInRoom(e.getPoint()))
-					{
-						roomSelected=r;
-					}
+				roomSelected=r;
 			}
-	  for(Sensor s: roomSelected.getSensors()) {
+									
+	  }
+	  
+	  for(Sensor s: roomSelected.getSensors()) 
+	  {
 		  if(e.getX()>s.getX() && e.getX()<s.getX()+30 && e.getY()>s.getY() && e.getY()<s.getY()+30) 
 			{
 				selected=s;
 				
-			}
+			}	     
+		  
 	  }
 	  
 	  
@@ -213,13 +219,15 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		selected.setY(null);
 		selected.setFk_room_id(null);
 		selected.setInstalled(false);
-		selected.setDate_setup(null);
-		selected.setFk_room(null);	
+		//selected.setDate_setup(null);
+		Room r=new Room();
+		r=null ;
+		selected.setFk_room(r);	
 		try {
 			bc.update(selected);
 
 		} catch (IOException | SQLException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		MapPanelView.this.getCurrent_floor().getSensors().remove(selected);
@@ -231,10 +239,6 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		
 	}	
 	 
-		
-	
-   
-	
 	
 	public Date getDate() {
 		DateFormat dateformat=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -243,8 +247,8 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		return d;
 	}
 
-@Override	
-public void mouseMoved(MouseEvent e) 
+	@Override	
+	public void mouseMoved(MouseEvent e) 
 	{
 		
 		
