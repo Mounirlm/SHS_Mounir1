@@ -516,11 +516,11 @@ public static boolean createSensor(Sensor sensor) throws SQLException{
 		 System.out.println(sensor.getFk_room_id());
 		 	 
 			 pstmt.setBoolean(1, sensor.getInstalled());
-			 pstmt.setObject(2, (Integer) sensor.getFk_room_id());
+			 pstmt.setObject(2,  (Integer)sensor.getFk_room_id());
 			 pstmt.setObject(3, (Integer) sensor.getX());
 			 pstmt.setObject(4, (Integer)sensor.getY());
 			 //pstmt.setString(5, sensor.getDate_setup_formatted());
-			 pstmt.setObject(5,(Integer) sensor.getId());
+			 pstmt.setObject(5, (Integer)sensor.getId());
 			
 			 System.out.println(pstmt);
 			 
