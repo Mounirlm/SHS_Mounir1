@@ -44,9 +44,9 @@ public class MapSHS extends JFrame implements IUpdatable{
 	private JList itemsListStock;
 	
     private JButton addSensorToStock;
-   
     private JLabel StockList;
     private JLabel mapTitle;
+    
     
 	MapPanelView plan;
 	Building building;
@@ -113,7 +113,7 @@ public class MapSHS extends JFrame implements IUpdatable{
 		StockList=new JLabel("StockList",SwingConstants.CENTER);
 		StockList.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
 		
-		addSensorToStock= new JButton("Add_Sensor_To_Stock");
+		addSensorToStock= new JButton("View_Sensor");
 		
 		addSensorToStock.addActionListener(new ActionListener() 
 		{
@@ -121,13 +121,14 @@ public class MapSHS extends JFrame implements IUpdatable{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-//				FormStockView fs = new FormStockView(building,-1,-1,-1,-1);
-//				fs.setVisible(true);
-//				update();
+//				FormStockView fs = new FormStockView(building,-1,-1,-1,-);
+				FormStockView fs = new FormStockView(building);
+				fs.setVisible(true);
+				update();
 			}
 		});
 		
-        
+		
         itemsListFloor = new JList<Object>(building.getFloor().toArray());
         JScrollPane scrollPane = new JScrollPane(itemsListFloor,
             ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
@@ -172,7 +173,7 @@ public class MapSHS extends JFrame implements IUpdatable{
 			}
 		});
         
-        
+         
         
         panW.add(scrollPane);
         

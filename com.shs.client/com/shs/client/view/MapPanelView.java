@@ -41,9 +41,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 	
 	
 	
-	
-	
-	
+
 	public MapPanelView( Building bg) 
 	{
 		this.building=bg;
