@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 import java.sql.SQLException;
 
-// Data source permet d'utiliser la poll
+// Data source permet d'utiliser la pool
 
 public class DataSource {
 	private static JDBCConnectionPool pool = null;  
