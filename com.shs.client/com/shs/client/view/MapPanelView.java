@@ -13,6 +13,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.shs.client.controller.BuildingController;
@@ -166,7 +168,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 					int millis = (int) (System.currentTimeMillis()/1000);
 					if(millis%2==0)
 					{
-						g.setColor(Color.RED);	
+						g.setColor(Color.GREEN);	
 						
 						
 					}
@@ -190,37 +192,47 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 	  Sensor selected = null;
 	  Room roomSelected= null;
 	
-		
-	 
-	  for(Room r : current_floor.getRoom())
-	  {
-			if(r.isPointInRoom(e.getPoint()))
-			{
-				roomSelected=r;
-			}
-									
-	  }
+	  boolean b=false;
+	
+	  	
+	  	for(Room rs: current_floor.getRoom())
+	  	{
+	  		if(rs.isPointInRoom(e.getPoint()))
+	  		{
+	  			roomSelected=rs;
+	  		
+	  			for(Sensor ss: roomSelected.getSensors()) 
+	  			{
+	  				
+	  				if(e.getX()>ss.getX() && e.getX()<ss.getX()+30 && e.getY()>ss.getY() && e.getY()<ss.getY()+30)
+	  				{
+	  					selected=ss;
+	  					b=true;
+	  					break;	 
+	  				}
+	  			}
+	  				
+	  		}
+	  	}
+	  	
+	  	if(!b) {
+	  		JOptionPane.showMessageDialog(this, 
+	  		         " Please click on sensor to remove it",
+	  		         " Sensor ",
+	  		         JOptionPane.WARNING_MESSAGE);
+	  		return;
+	  	}
 	  
-	  for(Sensor s: roomSelected.getSensors()) 
-	  {
-		  if(e.getX()>s.getX() && e.getX()<s.getX()+30 && e.getY()>s.getY() && e.getY()<s.getY()+30) 
-			{
-				selected=s;
-				
-			}	     
-		  
-	  }
-	  
-	  
+  
 	  	roomSelected.getSensors().remove(selected);
 		selected.setX(null);
 		selected.setY(null);
 		selected.setFk_room_id(null);
 		selected.setInstalled(false);
 		//selected.setDate_setup(null);
-		Room r=new Room();
-		r=null ;
-		selected.setFk_room(r);	
+		Room ro=new Room();
+		ro=null ;
+		selected.setFk_room(ro);	
 		try {
 			bc.update(selected);
 
@@ -231,9 +243,9 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		MapPanelView.this.getCurrent_floor().getSensors().remove(selected);
 		MapPanelView.this.building.getStock().getSensors().add(selected);
 		activateListener();
-		return;
+		//return;
 	  	
-		
+	 
 		
 	}	
 	 
