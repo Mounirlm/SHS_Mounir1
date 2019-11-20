@@ -217,7 +217,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 	  	
 	  	if(!b) {
 	  		JOptionPane.showMessageDialog(this, 
-	  		         " Please click on sensor to remove it",
+	  		         " Please Click on Sensor to remove it",
 	  		         " Sensor ",
 	  		         JOptionPane.WARNING_MESSAGE);
 	  		return;
