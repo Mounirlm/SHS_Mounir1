@@ -22,6 +22,7 @@ import com.shs.commons.model.Building;
 import com.shs.commons.model.Floor;
 import com.shs.commons.model.Room;
 import com.shs.commons.model.Sensor;
+import com.shs.commons.model.Sensor.SensorState;
 
 
 
@@ -42,8 +43,6 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 	FormStockView fs=null;
 	
 	
-	
-
 	public MapPanelView( Building bg) 
 	{
 		this.building=bg;
@@ -51,6 +50,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		this.addMouseListener(this);
 		this.setActive(true);
 		this.addMouseMotionListener(this);
+		
 		
 		
 		//DropTarget est un objet associé à un composant indiquant que celui-ci peut recevoir un DnD
@@ -65,22 +65,27 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 						dtde.acceptDrop(dtde.getDropAction());
 						Sensor selected = null;
 						Room room=null;
+						boolean success = false;
 						try 
 						{
 							selected = (Sensor)dtde.getTransferable().getTransferData(Sensor.SENSOR_DATA_FLAVOR);
 							
+							
 						} 
 						catch (Exception ex)
 						{
-							
+							System.out.println(ex);
 						}
 						if(selected==null) return;
+						
 						
 						for(Room r:current_floor.getRoom()) 
 						{
 						
 							if(r.isPointInRoom(dtde.getLocation()))
-							{	room=r;
+							{	
+								
+								room=r;
 								r.getSensors().add(selected);
 //								selected.setRoom(r);
 								selected.setX((int)dtde.getLocation().getX());
@@ -89,8 +94,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 								selected.setInstalled(true);
 								Date dte =new Date();
 						    	selected.setDate_setup(dte);
-						    	
-						    	
+						    
 							}
 						 }
 						
@@ -98,13 +102,13 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 								bc.update(selected);
 								
 							} catch (IOException | SQLException e) {
-								// TODO Auto-generated catch block
+								
 								e.printStackTrace();
 							}
 						 selected.setFk_room(room);
 						 MapPanelView.this.building.getStock().getSensors().remove(selected);
-						MapPanelView.this.getCurrent_floor().getSensors().add(selected);
-						activateListener();
+						 MapPanelView.this.getCurrent_floor().getSensors().add(selected);
+						 activateListener();
 					}
 				});		
 			  
@@ -152,6 +156,8 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 	{
 		super.paintComponent(g);
 		
+		
+		
 		if(current_floor==null)return;
 		
 		g.drawImage(current_floor.getFloorImage(), 0, 0, null);
@@ -163,12 +169,19 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 			{
 				
 				g.drawRect(s.getX(), s.getY(), 30, 30);
+					
+
+				if(s.getState().equals(SensorState.Marche)) 
+				{
+					g.setColor(Color.GREEN);
+				}
 				
-				
+				else if(s.getState().equals(SensorState.Alert))
+				{	
 					int millis = (int) (System.currentTimeMillis()/1000);
 					if(millis%2==0)
 					{
-						g.setColor(Color.GREEN);	
+						g.setColor(Color.RED);	
 						
 						
 					}
@@ -177,6 +190,11 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 						g.setColor(Color.DARK_GRAY);
 					}
 					
+				}
+				else 
+				{	
+					g.setColor(Color.ORANGE);	
+				}
 				
 				
 				g.fillRect(s.getX()+1, s.getY()+1, 29, 29);
@@ -189,67 +207,43 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
   @Override	
   public void mouseClicked(MouseEvent e) {
 
-	  Sensor selected = null;
-	  Room roomSelected= null;
-	
-	  boolean b=false;
-	
-	  	
-	  	for(Room rs: current_floor.getRoom())
-	  	{
-	  		if(rs.isPointInRoom(e.getPoint()))
-	  		{
-	  			roomSelected=rs;
-	  		
-	  			for(Sensor ss: roomSelected.getSensors()) 
-	  			{
-	  				
-	  				if(e.getX()>ss.getX() && e.getX()<ss.getX()+30 && e.getY()>ss.getY() && e.getY()<ss.getY()+30)
-	  				{
-	  					selected=ss;
-	  					b=true;
-	  					break;	 
-	  				}
-	  			}
-	  				
-	  		}
-	  	}
-	  	
-	  	if(!b) {
-	  		JOptionPane.showMessageDialog(this, 
-	  		         " Please Click on Sensor to remove it",
-	  		         " Sensor ",
-	  		         JOptionPane.WARNING_MESSAGE);
-	  		return;
-	  	}
-	  
-  
-	  	roomSelected.getSensors().remove(selected);
-		selected.setX(null);
-		selected.setY(null);
-		selected.setFk_room_id(null);
-		selected.setInstalled(false);
-		//selected.setDate_setup(null);
-		Room ro=new Room();
-		ro=null ;
-		selected.setFk_room(ro);	
-		try {
-			bc.update(selected);
-
-		} catch (IOException | SQLException e1) {
-			
-			e1.printStackTrace();
-		}
-		MapPanelView.this.getCurrent_floor().getSensors().remove(selected);
-		MapPanelView.this.building.getStock().getSensors().add(selected);
-		activateListener();
-		//return;
-	  	
-	 
 		
-	}	
+		for(Room r : current_floor.getRoom())
+		{
+			
+			for(Sensor s: r.getSensors()) 
+			{
+			
+				if(e.getX()>s.getX() && e.getX()<s.getX()+30 && e.getY()>s.getY() && e.getY()<s.getY()+30) 
+				{	
+//					if (e.getClickCount() == 2) 
+//					{
+//					s.setState(SensorState.Arret);
+//					}
+//					else 
+//					{
+						if(s.getState()==SensorState.Marche) 
+						{
+						s.setState(SensorState.Alert);
+						}
+						else if (s.getState()==SensorState.Alert) {
+							s.setState(SensorState.Arret);
+						}
+						else 
+						{
+							s.setState(SensorState.Marche);
+						}
+						
+//					}
+					
+				}
+			}
+		}
+		
+ 	
+  	}
 	 
-	
+
 	public Date getDate() {
 		DateFormat dateformat=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date d=new Date();
@@ -273,6 +267,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 					setToolTipText(s.toString() + " , IdRoom : " + r.getId());
 					
 				}
+				
 			}
 		}
 	}
@@ -309,8 +304,8 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
+
 	}
 
 	
