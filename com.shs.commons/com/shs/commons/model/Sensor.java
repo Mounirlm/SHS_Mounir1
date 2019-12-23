@@ -3,13 +3,16 @@ package com.shs.commons.model;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 
 public class Sensor implements Transferable {
+	
 	private Integer id;
 	private String sensor_name;
 	private String ip_address;
@@ -31,9 +34,15 @@ public class Sensor implements Transferable {
 	private Integer fk_room_id;
 	private Room room;
 	
+	public static enum SensorState { Marche , Arret, Alert;} 
+	
+	private SensorState sensorState = SensorState.Marche;
+	
+	
+	
 	//transferable : Classe qui permet a des composants swing d'échanger des transferables  par Dragndrop
 	
-		public static final DataFlavor SENSOR_DATA_FLAVOR = new DataFlavor(Sensor.class, "java/ListItem");
+	public static final DataFlavor SENSOR_DATA_FLAVOR = new DataFlavor(Sensor.class, "java/ListItem");
 	
 	
 	public Sensor() {
@@ -106,6 +115,15 @@ public class Sensor implements Transferable {
 		
 		this.x=x;
 		this.y=y;
+	}
+	
+	public Sensor(Integer id, String sensor_name, String ip_address, String mac_address,Boolean installed,Integer x,Integer y) {
+		super();
+		this.id = id;
+		this.sensor_name = sensor_name;
+		this.ip_address = ip_address;
+		this.mac_address = mac_address;
+		
 	}
 	
 	public Integer getId() {
@@ -259,6 +277,33 @@ public class Sensor implements Transferable {
 	}
 
 	
+	public SensorState getState() 
+	{
+		return sensorState;
+	}
+
+
+	public void setState(SensorState ss) 
+	{
+		
+		this.sensorState=ss;
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		
+		File f = new File("log.txt");
+		
+//		Log.AddLog("L'état du capteur a changé vers :" + ss.toString(), String.valueOf(getIdSensor()), dateFormat.format(date));
+//        try {
+//			Log.saveToFile(f);
+//		} catch (FileNotFoundException e) {
+//			
+//			e.printStackTrace();
+//		} catch (UnsupportedEncodingException e) {
+//			
+//			e.printStackTrace();
+//		}
+	}
 	
 	
 }
