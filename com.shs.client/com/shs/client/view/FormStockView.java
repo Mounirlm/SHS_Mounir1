@@ -34,9 +34,6 @@ import java.util.ArrayList;
 
 
 
-
-
-
 public class FormStockView extends JDialog  
 {
 		
@@ -44,9 +41,9 @@ public class FormStockView extends JDialog
 	
 	private JComboBox<String> cb_typeSensor;
 	
-	private JTextField idField, typeField, modelField, date_purchaseField, ip_addressField, mac_addressField, priceField ;
+	private JTextField idField, typeField, nameField, date_purchaseField, ip_addressField, mac_addressField, priceField ;
 	
-	private JLabel idLabel, typeLabel, modelLabel, ip_addressLabel, mac_addressLabel, date_purchaseLabel, priceLabel  ;
+	private JLabel idLabel, typeLabel, nameLabel, ip_addressLabel, mac_addressLabel, date_purchaseLabel, priceLabel  ;
 	
 	private JButton addButton, removeButton, exitButton; 
 
@@ -62,7 +59,7 @@ public class FormStockView extends JDialog
 	
 	private Sensor result = null;
 	
-	private final String[] entetes= {"ID", "Type", "Model","Date of Purchase","Price","Mac_address","IP_address"};
+	private final String[] entetes= {"ID", "Type", "Name","Date of Purchase","Price","Mac_address","IP_address"};
 	
 	private SensorController sensorService;
 	
@@ -127,8 +124,8 @@ public class FormStockView extends JDialog
 		 typeLabel = new JLabel("Type");  
 		 typeLabel.setBounds(30, 135, 100, 30);
 			 		 
-		 modelLabel =new JLabel("Model sensor");                               
-		 modelLabel.setBounds(30,205, 100, 30); 
+		 nameLabel =new JLabel("Name");                               
+		 nameLabel.setBounds(30,205, 100, 30); 
 			 	 
 		 date_purchaseLabel = new JLabel("Date of purchase");                                
 		 date_purchaseLabel.setBounds(30, 240, 100, 30); 
@@ -152,8 +149,9 @@ public class FormStockView extends JDialog
 		 
 		 
 		 cb_typeSensor.addItem("smoke_sensor");
-		 cb_typeSensor.addItem("_sensor");
-		 
+		 cb_typeSensor.addItem("door_sensor");
+		 cb_typeSensor.addItem("window_sensor");
+		 cb_typeSensor.addItem("temperature_sensor");
 
 		 String selectedType = (String) cb_typeSensor.getSelectedItem();
 
@@ -165,8 +163,8 @@ public class FormStockView extends JDialog
 		
 		
 		
-		 modelField = new JTextField();  
-		 modelField.setBounds(140, 205, 160, 30);
+		 nameField = new JTextField();  
+		 nameField.setBounds(140, 205, 160, 30);
 		 
 		 
 		 date_purchaseField = new JFormattedTextField (getMaskDate()); 
@@ -209,7 +207,7 @@ public class FormStockView extends JDialog
 
 		this.getContentPane().add(idLabel);
 		this.getContentPane().add(typeLabel);
-		this.getContentPane().add(modelLabel);
+		this.getContentPane().add(nameLabel);
 		this.getContentPane().add(date_purchaseLabel);
 		this.getContentPane().add(priceLabel);
 		this.getContentPane().add(mac_addressLabel);
@@ -217,7 +215,7 @@ public class FormStockView extends JDialog
 		this.getContentPane().add(idField);
 		this.getContentPane().add(typeField);
 		this.getContentPane().add(cb_typeSensor);
-		this.getContentPane().add(modelField);
+		this.getContentPane().add(nameField);
 		this.getContentPane().add(date_purchaseField);
 		this.getContentPane().add(priceField);
 		this.getContentPane().add(mac_addressField);
