@@ -41,9 +41,9 @@ public class FormStockView extends JDialog
 	
 	private JComboBox<String> cb_typeSensor;
 	
-	private JTextField idField, typeField, nameField, date_purchaseField, ip_addressField, mac_addressField, priceField ;
+	private JTextField  typeField, nameField,  ip_addressField, mac_addressField, priceField ;
 	
-	private JLabel idLabel, typeLabel, nameLabel, ip_addressLabel, mac_addressLabel, date_purchaseLabel, priceLabel  ;
+	private JLabel  typeLabel, nameLabel, ip_addressLabel, mac_addressLabel,  priceLabel  ;
 	
 	private JButton addButton, removeButton, exitButton; 
 
@@ -118,30 +118,24 @@ public class FormStockView extends JDialog
 	     
 	     p1.add(GetTable());
 	     		
-		 idLabel = new JLabel("Name");
-		 idLabel.setBounds(30, 100, 100, 30);
+		 nameLabel = new JLabel("Name");
+		 nameLabel.setBounds(30, 100, 100, 30);
 		 	 
 		 typeLabel = new JLabel("Type");  
 		 typeLabel.setBounds(30, 135, 100, 30);
 			 		 
-		 nameLabel =new JLabel("Price");                               
-		 nameLabel.setBounds(30,205, 100, 30); 
+		 priceLabel =new JLabel("Price");                               
+		 priceLabel.setBounds(30,205, 100, 30); 
 			 	 
-		 date_purchaseLabel = new JLabel("Mac_Address");                                
-		 date_purchaseLabel.setBounds(30, 240, 100, 30); 
+		 mac_addressLabel= new JLabel("Mac_Address");                                
+		 mac_addressLabel.setBounds(30, 240, 100, 30); 
 		 		 
-		 priceLabel = new JLabel("IP_Address");                               
-		 priceLabel.setBounds(30, 275, 100, 30);
+		 ip_addressLabel= new JLabel("IP_Address");                               
+		 ip_addressLabel.setBounds(30, 275, 100, 30);
 				 
-		 mac_addressLabel = new JLabel("Mac_Address");  
-		 mac_addressLabel.setBounds(30, 310, 100, 30); 
-				 
-		 ip_addressLabel =new JLabel(""); 
-		 ip_addressLabel.setBounds(30, 345, 100, 30); 
-		 
-		 		
-		 idField = new JTextField();                                
-		 idField.setBounds(140, 100, 160, 30); 
+	 		
+		 nameField= new JTextField();                                
+		 nameField.setBounds(140, 100, 160, 30); 
 		
 		
 		 cb_typeSensor = new JComboBox<String>();
@@ -160,19 +154,11 @@ public class FormStockView extends JDialog
 		 typeField= new JTextField(); 
 		 typeField.setBounds(140, 170, 160, 30);
 		 typeField.setColumns(20);
-		
-		
-		
-		 nameField = new JTextField();  
-		 nameField.setBounds(140, 205, 160, 30);
 		 
 		 
-		 date_purchaseField = new JFormattedTextField (getMaskDate()); 
-		 date_purchaseField.setBounds(140, 240, 160, 30);	 
+		 priceField = new JTextField(); 
+		 priceField.setBounds(140, 205, 160, 30); 
 		
-        
-		 priceField = new JTextField();
-		 priceField.setBounds(140, 275, 160, 30);
 		
 		 
 		 priceField.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -186,13 +172,15 @@ public class FormStockView extends JDialog
 				  }
 			  }
 			  });
+		 
+		
 		 	 
 		 ip_addressField= new JFormattedTextField(getMaskIP());
-		 ip_addressField.setBounds(140, 345, 160, 30);
+		 ip_addressField.setBounds(140, 240, 160, 30);
 		
 		 	
 		 mac_addressField= new JTextField();
-		 mac_addressField.setBounds(140, 310, 160, 30);
+		 mac_addressField.setBounds(140, 275, 160, 30);
 		
 		
 		 addButton = new JButton("CREATE");
@@ -205,18 +193,15 @@ public class FormStockView extends JDialog
 		 exitButton.setBounds( 305, 390, 115, 30);
 		 
 
-		this.getContentPane().add(idLabel);
+		
 		this.getContentPane().add(typeLabel);
 		this.getContentPane().add(nameLabel);
-		this.getContentPane().add(date_purchaseLabel);
 		this.getContentPane().add(priceLabel);
 		this.getContentPane().add(mac_addressLabel);
 		this.getContentPane().add(ip_addressLabel);
-		this.getContentPane().add(idField);
 		this.getContentPane().add(typeField);
 		this.getContentPane().add(cb_typeSensor);
 		this.getContentPane().add(nameField);
-		this.getContentPane().add(date_purchaseField);
 		this.getContentPane().add(priceField);
 		this.getContentPane().add(mac_addressField);
 		this.getContentPane().add(ip_addressField);
