@@ -59,7 +59,7 @@ public class FormStockView extends JDialog
 	
 	private Sensor result = null;
 	
-	private final String[] entetes= {"ID", "Type", "Name","Price","Mac_address","IP_address"};
+	private final String[] entetes= {"Name", "Type","Price","Mac_address","IP_address"};
 	
 	private SensorController sensorService;
 	
@@ -124,19 +124,19 @@ public class FormStockView extends JDialog
 		 typeLabel = new JLabel("Type");  
 		 typeLabel.setBounds(30, 135, 100, 30);
 			 		 
-		 nameLabel =new JLabel("Name");                               
+		 nameLabel =new JLabel("Price");                               
 		 nameLabel.setBounds(30,205, 100, 30); 
 			 	 
-		 date_purchaseLabel = new JLabel("Date of purchase");                                
+		 date_purchaseLabel = new JLabel("Mac_Address");                                
 		 date_purchaseLabel.setBounds(30, 240, 100, 30); 
 		 		 
-		 priceLabel = new JLabel("Price");                               
+		 priceLabel = new JLabel("IP_Address");                               
 		 priceLabel.setBounds(30, 275, 100, 30);
 				 
 		 mac_addressLabel = new JLabel("Mac_Address");  
 		 mac_addressLabel.setBounds(30, 310, 100, 30); 
 				 
-		 ip_addressLabel =new JLabel("IP_Address"); 
+		 ip_addressLabel =new JLabel(""); 
 		 ip_addressLabel.setBounds(30, 345, 100, 30); 
 		 
 		 		
@@ -380,8 +380,8 @@ public class FormStockView extends JDialog
        for (int j = 0; j < list.size(); j++)
        {
     	   //id = String.valueOf(list.get(j).getId());
-    	   type = list.get(j).getFk_type_sensor().getName().toString();
     	   name = list.get(j).getSensor_name();
+    	   type = list.get(j).getFk_type_sensor().getName().toString();
     	   price = list.get(j).getPrice().toString();
 	       ip_ad= list.get(j).getIp_address();
 	       mac_ad = list.get(j).getMac_address();
