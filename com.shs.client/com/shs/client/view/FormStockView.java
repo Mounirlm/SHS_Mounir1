@@ -59,7 +59,7 @@ public class FormStockView extends JDialog
 	
 	private Sensor result = null;
 	
-	private final String[] entetes= {"ID", "Type", "Name","Date of Purchase","Price","Mac_address","IP_address"};
+	private final String[] entetes= {"ID", "Type", "Name","Price","Mac_address","IP_address"};
 	
 	private SensorController sensorService;
 	
@@ -118,7 +118,7 @@ public class FormStockView extends JDialog
 	     
 	     p1.add(GetTable());
 	     		
-		 idLabel = new JLabel("ID");
+		 idLabel = new JLabel("Name");
 		 idLabel.setBounds(30, 100, 100, 30);
 		 	 
 		 typeLabel = new JLabel("Type");  
@@ -195,10 +195,10 @@ public class FormStockView extends JDialog
 		 mac_addressField.setBounds(140, 310, 160, 30);
 		
 		
-		 addButton = new JButton("Add");
+		 addButton = new JButton("CREATE");
 		 addButton.setBounds(30, 390, 115, 30); 
 		
-		 removeButton = new JButton("RemoveSelectRow");
+		 removeButton = new JButton("DELETE");
 		 removeButton.setBounds( 160, 390, 115, 30); 
 		
 		 exitButton = new JButton("EXIT");
@@ -365,10 +365,10 @@ public class FormStockView extends JDialog
 	public void initTableStock() throws IOException 
 	{   
 		ArrayList<Sensor> list=null;
-//	   list= b.getStock().getSensors();
-	   list =(ArrayList<Sensor>) sensorService.getAllSensors();
+	   list= (ArrayList<Sensor>) b.getStock().getSensors();
+	   //list =(ArrayList<Sensor>) sensorService.getAllSensors();
 	   String id;	
-	   String type,ip_ad,mac_ad;
+	   String type,name, price, ip_ad,mac_ad;
 	     
 	   model=new DefaultTableModel();
 	   
@@ -379,12 +379,14 @@ public class FormStockView extends JDialog
 	    
        for (int j = 0; j < list.size(); j++)
        {
-    	   id = String.valueOf(list.get(j).getId());
+    	   //id = String.valueOf(list.get(j).getId());
     	   type = list.get(j).getFk_type_sensor().getName().toString();
+    	   name = list.get(j).getSensor_name();
+    	   price = list.get(j).getPrice().toString();
 	       ip_ad= list.get(j).getIp_address();
 	       mac_ad = list.get(j).getMac_address();
 	       
-	       Object[] data = {id,type,ip_ad,mac_ad};
+	       Object[] data = {name,type, price,ip_ad,mac_ad};
 	       model.addRow(data);
        }
        
