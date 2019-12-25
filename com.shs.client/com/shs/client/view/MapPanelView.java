@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -27,7 +29,7 @@ import com.shs.commons.model.Sensor.SensorState;
 
 
 
-public class MapPanelView extends JPanel implements MouseListener, MouseMotionListener{
+public class MapPanelView extends JPanel implements MouseListener, MouseMotionListener {
 	
 	ArrayList<IUpdatable>updatables;
 	Building building;
@@ -39,7 +41,6 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 	//Log log;
 	
 	Sensor sensorToUpdate;
-	
 	FormStockView fs=null;
 	
 	
@@ -50,8 +51,6 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		this.addMouseListener(this);
 		this.setActive(true);
 		this.addMouseMotionListener(this);
-		
-		
 		
 		//DropTarget est un objet associé à un composant indiquant que celui-ci peut recevoir un DnD
 				// on active le drop sur le PLAN
@@ -156,8 +155,6 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 	{
 		super.paintComponent(g);
 		
-		
-		
 		if(current_floor==null)return;
 		
 		g.drawImage(current_floor.getFloorImage(), 0, 0, null);
@@ -216,12 +213,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 			
 				if(e.getX()>s.getX() && e.getX()<s.getX()+30 && e.getY()>s.getY() && e.getY()<s.getY()+30) 
 				{	
-//					if (e.getClickCount() == 2) 
-//					{
-//					s.setState(SensorState.Arret);
-//					}
-//					else 
-//					{
+
 						if(s.getState()==SensorState.Marche) 
 						{
 						s.setState(SensorState.Alert);
@@ -233,13 +225,10 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 						{
 							s.setState(SensorState.Marche);
 						}
-						
-//					}
-					
+											
 				}
 			}
 		}
-		
  	
   	}
 	 
@@ -296,9 +285,9 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		for(IUpdatable i : updatables)
 		{
 			i.update();
+		
 		}
 	}
-	
 	
 
 	
@@ -334,5 +323,10 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		
 	}
 
+
+
+
+
+	
 
 }
