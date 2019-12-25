@@ -2,29 +2,38 @@ package com.shs.client.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.shs.client.controller.BuildingController;
+import com.shs.client.model.RoomClientHandler;
 import com.shs.commons.model.Building;
 import com.shs.commons.model.Floor;
 import com.shs.commons.model.Room;
@@ -47,6 +56,12 @@ public class MapSHS extends JFrame implements IUpdatable{
     private JLabel StockList;
     private JLabel mapTitle;
     
+    private JLabel jLSensorId;
+    private JTextField jtxSensorId;
+    private JPanel pGenerate;
+    private JButton jbRemoveToStockSensor;
+    private JButton jbDefaultSensor;
+    
     
 	MapPanelView plan;
 	Building building;
@@ -54,7 +69,7 @@ public class MapSHS extends JFrame implements IUpdatable{
 	Floor floor;
 	Stock stock;
 	
-	
+		
 	public MapSHS(String name) {
         super(name);
     }
@@ -88,8 +103,6 @@ public class MapSHS extends JFrame implements IUpdatable{
 		}
 		
 		plan = new MapPanelView(building);
-		 
-		
 		
 		plan.addUpdatableListener(this);// pattern Observer Observable
 		// plan ne doit pas avoir de lien avec ihm donc ihm s'inscrit comme listener du plan
@@ -110,8 +123,10 @@ public class MapSHS extends JFrame implements IUpdatable{
 		
 		panE.setLayout(new GridLayout(7,1));
 		
-		StockList=new JLabel("StockList",SwingConstants.CENTER);
+		StockList=new JLabel("STOCK_SENSOR",SwingConstants.CENTER);
 		StockList.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
+		StockList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+	    StockList.setBackground(Color.BLUE);
 		
 		addSensorToStock= new JButton("View_Sensor");
 		
@@ -121,7 +136,7 @@ public class MapSHS extends JFrame implements IUpdatable{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-//				FormStockView fs = new FormStockView(building,-1,-1,-1,-);
+				
 				FormStockView fs = new FormStockView(building);
 				fs.setVisible(true);
 				update();
@@ -184,6 +199,132 @@ public class MapSHS extends JFrame implements IUpdatable{
         
         panW.add(scrollPane2);
         
+        jLSensorId = new JLabel("ID_SENSOR",SwingConstants.CENTER);
+        Border bord = BorderFactory.createLineBorder(Color.BLACK);
+        jLSensorId.setBorder(bord);
+		jLSensorId.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
+        jLSensorId.setHorizontalAlignment(JLabel.CENTER);
+        jLSensorId.setBackground(Color.BLUE);
+        
+        
+        
+        jLSensorId.setPreferredSize(new Dimension(40, 40));
+        jtxSensorId=new JTextField();
+        jtxSensorId.setPreferredSize(new Dimension(40, 40));
+        jbRemoveToStockSensor= new JButton("RemoveToStock");
+        jbRemoveToStockSensor.setPreferredSize(new Dimension(40, 40));
+        jbDefaultSensor=new JButton("DEFAULT");
+        jbDefaultSensor.setPreferredSize(new Dimension(40, 40));
+        pGenerate=new JPanel();
+        pGenerate.setLayout(new GridLayout(2,1));
+        pGenerate.add(jbRemoveToStockSensor);
+        pGenerate.add(jbDefaultSensor);
+        
+        
+        jtxSensorId.addKeyListener(new java.awt.event.KeyAdapter() {
+			  public void keyTyped(java.awt.event.KeyEvent evt) {
+				  char c=evt.getKeyChar();
+				  if(!(Character.isDigit(c)||
+				      (c==KeyEvent.VK_BACK_SPACE)||c==KeyEvent.VK_DELETE||evt.getKeyChar() == ',')){
+				  //  evt.getKeyChar() == '.' does accept point when jtextfield accepts decimal number
+				    evt.consume();
+				    getToolkit().beep();
+				  }
+			  }
+			  });
+        
+       
+        
+			
+        jbRemoveToStockSensor.addActionListener(new ActionListener()  
+		{
+        	
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				Floor f = (Floor)itemsListFloor.getSelectedValue();
+				Sensor selected=null;
+				Room roomSelected=null;
+				                    
+				if(jtxSensorId.getText().equals("") )                           
+				{
+					  JOptionPane.showMessageDialog(MapSHS.this, "Field ID must not be blank"); 
+				}
+				
+				else 
+				{
+					try {
+						
+					
+						if(jtxSensorId.getText()!= "") 
+						{
+					
+						for (Sensor s : f.getSensors() )
+						{
+							
+							if (s.getId()== Integer.parseInt(jtxSensorId.getText())) 
+							{
+								selected = s;
+								System.out.println(selected.getFk_room().getId());
+								jtxSensorId.setText("");
+								
+								break;
+							}	
+								
+						}	
+						
+						for(Room r : f.getRoom())
+						{
+									
+									if (r.getId().equals(selected.getFk_room().getId()) )
+									{
+										roomSelected=r;
+										System.out.println(roomSelected.getId());
+										break;
+									}
+								   
+						}
+						
+						
+						
+					}
+						
+						
+					} catch (NumberFormatException e3) {
+						// TODO Auto-generated catch block
+						e3.printStackTrace();
+					} catch (HeadlessException e3) {
+						// TODO Auto-generated catch block
+						e3.printStackTrace();
+					}
+							
+					roomSelected.getSensors().remove(selected);
+					selected.setX(null);
+					selected.setY(null);
+					selected.setFk_room_id(null);
+					selected.setInstalled(false);
+					
+					Room ro=new Room();
+					ro=null ;
+					selected.setFk_room(ro);	
+					try {
+						buildingController.update(selected);
+
+					} catch (IOException | SQLException e1) {
+						
+						e1.printStackTrace();
+					}
+					plan.getCurrent_floor().getSensors().remove(selected);
+					plan.building.getStock().getSensors().add(selected);
+					update();							
+					}
+				
+				
+			}
+		
+		});
+        
+        
         itemsListStock = new JList<Sensor>(building.getStock().getSensorArray());
         JScrollPane scrollPane3 = new JScrollPane(itemsListStock,
             ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
@@ -197,7 +338,9 @@ public class MapSHS extends JFrame implements IUpdatable{
         panE.add(scrollPane3);
         panE.add(addSensorToStock);
         
-
+        panE.add(jLSensorId);
+        panE.add(jtxSensorId);
+        panE.add(pGenerate);
        
         
         
@@ -222,8 +365,7 @@ public class MapSHS extends JFrame implements IUpdatable{
 		});
 		
 	}
-
-	
+		
 	
 	
 	public Date getDate() {
@@ -232,8 +374,6 @@ public class MapSHS extends JFrame implements IUpdatable{
 		
 		return d;
 	}
-
-	
 	
 	// MapSHS implements IUpdatable
 	public void update()  
@@ -244,9 +384,14 @@ public class MapSHS extends JFrame implements IUpdatable{
 		itemsListSensor.setListData(f.getSensors().toArray());
 		
 		itemsListStock.setListData(building.getStock().getSensorArray());
-		
-    	
+
 	}
 
+	
+	
+	
+	
 }
+
+
 
