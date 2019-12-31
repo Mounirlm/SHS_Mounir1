@@ -11,14 +11,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.StringTokenizer;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -29,11 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import com.shs.client.controller.BuildingController;
-import com.shs.client.model.RoomClientHandler;
 import com.shs.commons.model.Building;
 import com.shs.commons.model.Floor;
 import com.shs.commons.model.Room;
@@ -46,44 +38,39 @@ public class MapSHS extends JFrame implements IUpdatable {
 	private JPanel panW;
 	private JPanel panE;
 	private JPanel panS;
+	
+	private JLabel jLS;
 
-	private JList itemsListFloor;
-	// private JList itemsListSensor;
+	private JPanel panFloor;
+	private JLabel floorLabel;
+	private JComboBox jcomboFloor;
+	private ArrayList<Floor> floors;
 	private JList itemsListStock;
 
 	private JButton addSensorToStock;
 	private JLabel StockList;
 	private JLabel mapTitle;
-
 	private JLabel jLSensorId;
 	private JTextField jtxSensorId;
-	private JPanel pGenerate;
 	private JButton jbRemoveToStockSensor;
-	private JButton jbDefaultSensor;
-
+	private JButton jbRefresh;
 	private JPanel panInfoSensorInstalledInFloor;
-
-	private JLabel jlSensorName;
-	private JLabel jlSensorType;
-	private JLabel jlSensorRoomName;
-	private JLabel jlSensorPosX;
-	private JLabel jlSensorPosY;
-	private JLabel jlSensorPrice;
-	private JLabel jlSensorMAC;
-	private JLabel jlSensorIP;
-	private JLabel jlSensorID;
-	private JLabel jlSensorState;
-	private JTextField jtxSID;
 	private JButton jbSearchInfoSensorInFloor;
+	private JLabel jLInfoSensor;
+	
+	
+	private final String[] entetes = { "Sensor_Name", "Sensor_Type", "Room_Number", "X_position", "Y_position", "Price", "Mac_address",
+			"IP_address", "State"};
 
-	private final String[] entetes = { "Name", "Type", "Room", "X_position", "Y_position", "Price", "Mac_address",
-			"IP_address", "State" };
-
+	private JLabel labels[] = new JLabel[9];
+	
 	MapPanelView plan;
 	Building building;
 	BuildingController buildingController;
 	Floor floor;
 	Stock stock;
+	
+	
 
 	public MapSHS(String name) {
 		super(name);
@@ -109,63 +96,78 @@ public class MapSHS extends JFrame implements IUpdatable {
 			building.setStock(stock);
 
 		} catch (IOException | ClassNotFoundException | SQLException e2) {
-			// TODO Auto-generated catch block
+			
 			e2.printStackTrace();
 		}
-
+		
 		plan = new MapPanelView(building);
 
 		plan.addUpdatableListener(this);// pattern Observer Observable
-		// plan ne doit pas avoir de lien avec ihm donc ihm s'inscrit comme listener du
-		// plan
+		// plan ne doit pas avoir de lien avec ihm donc ihm s'inscrit comme listener du plan
 
 		panN = new JPanel();
 		panW = new JPanel();
 		panE = new JPanel();
 		panS = new JPanel();
+		
+		
+		jLS = new JLabel();
+		jLS.setText("AutonHome SHS Copyright");
+		jLS.setForeground(Color.WHITE);
+		jLS.setHorizontalAlignment(JLabel.CENTER);
+		jLS.setFont(new Font("Arial", Font.BOLD, 12));
+		
+		panS.setBackground(ColorsApp.getBgThem());
+		panS.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+		panS.add(jLS);
+		
 
-		panN.setBackground(Color.BLUE);
-		mapTitle = new JLabel("SHS_MAP");
-		panN.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		panFloor = new JPanel();
+		panFloor.setLayout(new GridLayout(3, 1));
+		
+		
+		jLInfoSensor = new JLabel("SENSOR INFO", SwingConstants.CENTER);
+		Border bord = BorderFactory.createLineBorder(Color.BLACK);
+		jLInfoSensor.setBorder(bord);
+		jLInfoSensor.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
+		jLInfoSensor.setHorizontalAlignment(JLabel.CENTER);
+
+		
+		mapTitle = new JLabel();
+		mapTitle.setText("MAP");
+		mapTitle.setForeground(Color.WHITE);
+		mapTitle.setHorizontalAlignment(JLabel.CENTER);
+		mapTitle.setFont(new Font("Arial", Font.BOLD, 15));
+		
+		panN.setBackground(ColorsApp.getBgThem());
+		panN.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		panN.add(mapTitle);
 
 		panW.setLayout(new GridLayout(2, 1));
-		panE.setLayout(new GridLayout(7, 1));
+		panW.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+		
+		panE.setLayout(new GridLayout(8, 1));
 
 		panInfoSensorInstalledInFloor = new JPanel();
-		panInfoSensorInstalledInFloor.setLayout(new GridLayout(11, 1));
+		panInfoSensorInstalledInFloor.setLayout(new GridLayout(10, 1));
 		panInfoSensorInstalledInFloor.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-		jlSensorName = new JLabel("Name : ");
-		jlSensorType = new JLabel("Type : ");
-		jlSensorRoomName = new JLabel("Room");
-		jlSensorPosX = new JLabel(" Position_X : ");
-		jlSensorPosY = new JLabel("Position_Y : ");
-		jlSensorPrice = new JLabel("Price");
-		jlSensorMAC = new JLabel("@MAC : ");
-		jlSensorIP = new JLabel("@IP");
-		jlSensorState = new JLabel("");
 
-		jtxSID = new JTextField();
-		jbSearchInfoSensorInFloor = new JButton("SEARCH_INFO");
+		jbSearchInfoSensorInFloor = new JButton("SEARCH INFO");
 
-		JLabel labels[] = new JLabel[9];
-
-		for (int i = 1; i < entetes.length; i++) {
+		for (int i = 0; i < entetes.length; i++) {
 			labels[i] = new JLabel(" " + entetes[i] + " : ");
 			panInfoSensorInstalledInFloor.add(labels[i]);
 
 		}
 
-		panInfoSensorInstalledInFloor.add(jtxSID);
-		panInfoSensorInstalledInFloor.add(jbSearchInfoSensorInFloor);
 
-		StockList = new JLabel("STOCK_SENSOR", SwingConstants.CENTER);
+		StockList = new JLabel("STOCK", SwingConstants.CENTER);
 		StockList.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
 		StockList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		StockList.setBackground(Color.BLUE);
+		StockList.setBackground(ColorsApp.getBgThem());
 
-		addSensorToStock = new JButton("CREATE_SENSOR");
+		addSensorToStock = new JButton("STOCK VIEW");
 
 		addSensorToStock.addActionListener(new ActionListener() {
 
@@ -178,16 +180,28 @@ public class MapSHS extends JFrame implements IUpdatable {
 			}
 		});
 
-		itemsListFloor = new JList<Object>(building.getFloor().toArray());
-		JScrollPane scrollPane = new JScrollPane(itemsListFloor, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-		itemsListFloor.addListSelectionListener(new ListSelectionListener() {
+		floors = new ArrayList<Floor>();
 
+		floors = building.getFloor();
+
+		floorLabel = new JLabel(" FLOOR ", SwingConstants.CENTER);
+		floorLabel.setHorizontalAlignment(JLabel.CENTER);
+		floorLabel.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
+		floorLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		floorLabel.setForeground(Color.BLACK);
+		jcomboFloor = new JComboBox<Floor>();
+
+		for (int i = 0; i < floors.size(); i++) {
+			jcomboFloor.addItem(floors.get(i));
+		}
+
+		jcomboFloor.addActionListener(new ActionListener() {
 			@Override
-			public void valueChanged(ListSelectionEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
-				Floor f = (Floor) itemsListFloor.getSelectedValue();
+				Floor f = (Floor) jcomboFloor.getSelectedItem();
+				setFloor(f);
 
 				try {
 
@@ -201,8 +215,6 @@ public class MapSHS extends JFrame implements IUpdatable {
 					}
 
 					f.setSensors(sensor2);
-
-					// itemsListSensor.setListData(f.getSensors().toArray());
 					plan.setCurrent_floor(f);
 
 				} catch (IOException e2) {
@@ -212,53 +224,46 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 			}
 		});
-
-		panW.add(scrollPane);
-		panW.add(panInfoSensorInstalledInFloor);
-
-//        itemsListSensor = new JList<Object>();
-//        JScrollPane scrollPane2 = new JScrollPane(itemsListSensor,
-//            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-//            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//        
-//        panW.add(scrollPane2);
-
-		jLSensorId = new JLabel("ID_SENSOR", SwingConstants.CENTER);
-		Border bord = BorderFactory.createLineBorder(Color.BLACK);
-		jLSensorId.setBorder(bord);
+		
+		
+		jLSensorId = new JLabel("SENSOR", SwingConstants.CENTER);
+		jLSensorId.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		jLSensorId.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
 		jLSensorId.setHorizontalAlignment(JLabel.CENTER);
-		jLSensorId.setBackground(Color.BLUE);
 
-		jLSensorId.setPreferredSize(new Dimension(40, 40));
+		panFloor.add(floorLabel);
+		panFloor.add(jcomboFloor);
+		panFloor.add(jLInfoSensor);
+		panW.add(panFloor);
+		panW.add(panInfoSensorInstalledInFloor);
+
+	
 		jtxSensorId = new JTextField();
-		jtxSensorId.setPreferredSize(new Dimension(40, 40));
-		jbRemoveToStockSensor = new JButton("RemoveToStock");
+		jbRemoveToStockSensor = new JButton("REMOVE SENSOR TO STOCK");
 		jbRemoveToStockSensor.setPreferredSize(new Dimension(40, 40));
-		jbDefaultSensor = new JButton("DEFAULT");
-		jbDefaultSensor.setPreferredSize(new Dimension(40, 40));
-		pGenerate = new JPanel();
-		pGenerate.setLayout(new GridLayout(2, 1));
-		pGenerate.add(jbRemoveToStockSensor);
-		pGenerate.add(jbDefaultSensor);
+		jbRefresh = new JButton("REFRESH");
+		jbRefresh.setPreferredSize(new Dimension(40, 40));
+		
 
 		jtxSensorId.addKeyListener(new java.awt.event.KeyAdapter() {
 			public void keyTyped(java.awt.event.KeyEvent evt) {
 				char c = evt.getKeyChar();
-				if (!(Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || c == KeyEvent.VK_DELETE
-						|| evt.getKeyChar() == ',') || evt.getKeyChar() == '.') {
+				if (!(Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || c == KeyEvent.VK_DELETE)) {
 					evt.consume();
 					getToolkit().beep();
 					JOptionPane.showMessageDialog(MapSHS.this, "Field ID must be an Integer");
 				}
 			}
 		});
+		
+
+
 
 		jbRemoveToStockSensor.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Floor f = (Floor) itemsListFloor.getSelectedValue();
+				Floor f = (Floor) jcomboFloor.getSelectedItem();
 				Sensor selected = null;
 				Room roomSelected = null;
 
@@ -274,7 +279,6 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 								if (s.getId() == Integer.parseInt(jtxSensorId.getText())) {
 									selected = s;
-									System.out.println(selected.getFk_room().getId());
 									jtxSensorId.setText("");
 									b = true;
 									break;
@@ -287,9 +291,11 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 								JOptionPane.showMessageDialog(MapSHS.this,
 										"Error ID : this sensor is not present in floor");
-
+								jtxSensorId.setText("");
 								return;
 							} else {
+								
+								
 
 								for (Room r : f.getRoom()) {
 									if (r.getId().equals(selected.getFk_room().getId())) {
@@ -318,6 +324,8 @@ public class MapSHS extends JFrame implements IUpdatable {
 								}
 								plan.getCurrent_floor().getSensors().remove(selected);
 								plan.building.getStock().getSensors().add(selected);
+								
+								
 								update();
 
 							}
@@ -332,7 +340,6 @@ public class MapSHS extends JFrame implements IUpdatable {
 					}
 
 				}
-
 			}
 
 		});
@@ -341,23 +348,23 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Floor f = (Floor) itemsListFloor.getSelectedValue();
+				Floor f = (Floor) jcomboFloor.getSelectedItem();
 				Sensor selected = null;
 				Room roomSelected = null;
 
-				if (jtxSID.getText().equals("")) {
+				if (jtxSensorId.getText().equals("")) {
 					JOptionPane.showMessageDialog(MapSHS.this, "Field ID must be an Integer and not be blank");
 				} else {
 
-					if (jtxSID.getText() != "") {
+					if (jtxSensorId.getText() != "") {
 						boolean b = false;
 
 						for (Sensor s : f.getSensors()) {
 
-							if (s.getId() == Integer.parseInt(jtxSID.getText())) {
+							
+							if (s.getId() == Integer.parseInt(jtxSensorId.getText())) {
 								selected = s;
-								System.out.println(selected.getFk_room().getId());
-								jtxSID.setText("");
+								jtxSensorId.setText("");
 								b = true;
 								break;
 
@@ -369,23 +376,78 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 							JOptionPane.showMessageDialog(MapSHS.this,
 									"Error ID : this sensor is not present in floor");
-
+							jtxSensorId.setText("");
 							return;
 						} else {
-							String[] info = { selected.getSensor_name(), selected.getFk_type_sensor().getName(),
+								
+							        String info[] = { selected.getSensor_name(), selected.getFk_type_sensor().getName(),
 									selected.getFk_room().getRoom_number().toString(), selected.getX().toString(),
 									selected.getY().toString(), selected.getPrice().toString(),
 									selected.getMac_address(), selected.getIp_address(), selected.getState().name() };
 
-							for (int i = 1; i < info.length; i++) {
+						    						        
+							for (int i = 0; i < info.length; i++) {
 								labels[i].setText(" " + entetes[i] + " : " + info[i]);
 							}
-
+							
+					
+								
+							
+						
 						}
 
 					}
-				}
 
+				}
+			}
+		});
+		
+		jbRefresh.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				Floor f = (Floor) jcomboFloor.getSelectedItem();
+				
+				if(f==null) {
+					
+					JOptionPane.showMessageDialog(MapSHS.this,
+							"Please : Select an floor first ");
+				}
+				else 
+				{
+				try {
+					building = buildingController.getBuilding();
+				} catch (IOException e1) {
+					
+					e1.printStackTrace();
+				}
+				try {
+
+					f.setRoom((buildingController.getRoomListInFloor(f.getId())));
+					buildingController.setSensorInROOM(f);
+
+					ArrayList<Sensor> sensor2 = new ArrayList<>();
+					
+					for (Room r : f.getRoom()) {
+
+						sensor2.addAll(r.getSensors());
+					}
+
+				
+					itemsListStock.setListData(buildingController.getSensorsNotInstalled().toArray());
+					
+					
+
+
+				} catch (IOException e2) {
+
+					e2.printStackTrace();
+				}
+				
+				}
+						
+				
 			}
 		});
 
@@ -398,10 +460,11 @@ public class MapSHS extends JFrame implements IUpdatable {
 		panE.add(StockList);
 		panE.add(scrollPane3);
 		panE.add(addSensorToStock);
-
 		panE.add(jLSensorId);
 		panE.add(jtxSensorId);
-		panE.add(pGenerate);
+		panE.add(jbSearchInfoSensorInFloor);
+		panE.add(jbRemoveToStockSensor);
+		panE.add(jbRefresh);
 
 		this.getContentPane().setLayout(new BorderLayout());
 		this.getContentPane().add(panN, BorderLayout.PAGE_START);
@@ -410,26 +473,36 @@ public class MapSHS extends JFrame implements IUpdatable {
 		this.getContentPane().add(panE, BorderLayout.LINE_END);
 		this.getContentPane().add(panS, BorderLayout.PAGE_END);
 
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-
+				MapView m = new MapView();
+				m.setVisible(true);
 			}
 		});
 
 	}
+	
+	
 
 	// MapSHS implements IUpdatable
 	public void update() {
 
-		Floor f = (Floor) itemsListFloor.getSelectedValue();
-
-		// itemsListSensor.setListData(f.getSensors().toArray());
-
+		Floor f = (Floor) jcomboFloor.getSelectedItem();
 		itemsListStock.setListData(building.getStock().getSensorArray());
+		
 
 	}
 
+	public Floor getFloor() {
+		return floor;
+	}
+
+	public void setFloor(Floor floor) {
+		this.floor = floor;
+	}
+	
+	
+
+	
 }
