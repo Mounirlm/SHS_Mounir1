@@ -210,7 +210,7 @@ public class Room implements Comparable<Room>{
 		this.fk_floor_map = fk_floor;
 	}
 
-
+   
 	@Override
 	public int compareTo(Room o) {
 		if(this.getId()<o.getId())
@@ -221,7 +221,15 @@ public class Room implements Comparable<Room>{
 			return 0;
 	}
 
-
+	public boolean isTypeSensorInRoom(Sensor sensor)
+	{   
+		for(Sensor s : this.getSensors()) {
+			if (sensor.getFk_type_sensor()==s.getFk_type_sensor()){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public String toString() {
