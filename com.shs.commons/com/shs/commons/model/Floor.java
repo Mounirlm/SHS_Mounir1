@@ -127,8 +127,9 @@ public class Floor {
 	
 	@Override
 	public String toString() {
-		return "Floor [id=" + id + ", name=" + name + "]";
+		return "" + name ;
 	}
+	
 
 	
 	
