@@ -243,6 +243,11 @@ public class BuildingController {
 		
 	}
 	
+	public static String delete(Sensor s)  throws IOException, SQLException {
+		
+		 return sensorService.delete(s);
+	}
+	
 
 	public static void setBuilding(Building building) {
 		BuildingController.building = building;
