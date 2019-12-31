@@ -25,225 +25,286 @@ public class SensorManager {
 	private static Connection conn;
 
 	public SensorManager(Connection con) {
-		this.conn=con;
+		this.conn = con;
 	}
 
-
-	public static ArrayList<Sensor> getSensors(String req) throws SQLException, ParseException{
+	public static ArrayList<Sensor> getSensors(String req) throws SQLException, ParseException {
 		Statement Stmt = conn.createStatement();
 		Statement Stmt2 = conn.createStatement();
 		Statement Stmt3 = conn.createStatement();
 
 		ArrayList<Sensor> sensorsList = new ArrayList<Sensor>();
-		ResultSet RS=null;
-		ResultSet rswing_room=null;
-		ResultSet rstype_sensor=null;
+		ResultSet RS = null;
+		ResultSet rswing_room = null;
+		ResultSet rstype_sensor = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
 			if (req.isEmpty()) {
 				RS = Stmt.executeQuery("SELECT * FROM sensor");
-			}else {
+			} else {
 				RS = Stmt.executeQuery(req);
 			}
-			
 
-			while(RS.next()) {
-				rswing_room=Stmt2.executeQuery("SELECT * FROM wing_room WHERE id="+RS.getInt("fk_position"));
-				rstype_sensor=Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id="+RS.getInt("fk_type_sensor"));
+			while (RS.next()) {
+				rswing_room = Stmt2.executeQuery("SELECT * FROM wing_room WHERE id=" + RS.getInt("fk_position"));
+				rstype_sensor = Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id=" + RS.getInt("fk_type_sensor"));
 
-
-				if ( rswing_room.next()  && rstype_sensor.next()) {
+				if (rswing_room.next() && rstype_sensor.next()) {
 					Room room = new Room();
 					RoomManager room_manager = new RoomManager(conn);
 					room = RoomManager.getRoom(RS.getInt("fk_room"));
 
-					sensorsList.add(new Sensor(RS.getInt("id"),RS.getString("sensor_name"), RS.getString("ip_address"), RS.getString("mac_address"),
-							dateFormat.parse(RS.getString("date_setup")), RS.getBoolean("status"), RS.getBoolean("installed"),
+					sensorsList.add(new Sensor(RS.getInt("id"), RS.getString("sensor_name"), RS.getString("ip_address"),
+							RS.getString("mac_address"), dateFormat.parse(RS.getString("date_setup")),
+							RS.getBoolean("status"), RS.getBoolean("installed"),
 							new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
-							RS.getFloat("price"),
-							room,
+							RS.getFloat("price"), room,
 							new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
-									rstype_sensor.getInt("trigger_point_min"),rstype_sensor.getInt("trigger_point_max"),
-									rstype_sensor.getInt("nb_alerts")),
+									rstype_sensor.getInt("trigger_point_min"),
+									rstype_sensor.getInt("trigger_point_max"), rstype_sensor.getInt("nb_alerts")),
 							RS.getInt("scope_sensor")));
-				
+
 				}
-			}	
-		}
-		finally {
+			}
+		} finally {
 			// Closing
-			
-			if(RS!=null)
-				try{RS.close();}catch(Exception e){e.printStackTrace();} 
-			if(rstype_sensor!=null)
-				try{rstype_sensor.close();}catch(Exception e){e.printStackTrace();} 
-			if(rswing_room!=null)
-				try{rswing_room.close();}catch(Exception e){e.printStackTrace();}  
-			if(Stmt!=null)
-				try{Stmt.close();}catch(Exception e){e.printStackTrace();} 
-			if(Stmt2!=null)
-				try{Stmt2.close();}catch(Exception e){e.printStackTrace();} 
-			if(Stmt3!=null)
-				try{Stmt3.close();}catch(Exception e){e.printStackTrace();}  
+
+			if (RS != null)
+				try {
+					RS.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (rstype_sensor != null)
+				try {
+					rstype_sensor.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (rswing_room != null)
+				try {
+					rswing_room.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt != null)
+				try {
+					Stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt2 != null)
+				try {
+					Stmt2.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt3 != null)
+				try {
+					Stmt3.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
 		return sensorsList;
 	}
 
-	public static Sensor getSensor(int id) throws SQLException, ParseException{
+	public static Sensor getSensor(int id) throws SQLException, ParseException {
 		Statement Stmt = conn.createStatement();
 		Statement Stmt2 = conn.createStatement();
 		Statement Stmt3 = conn.createStatement();
 
 		Sensor sensor = null;
-		ResultSet RS=null;
-		ResultSet rswing_room=null;
-		ResultSet rstype_sensor=null;
+		ResultSet RS = null;
+		ResultSet rswing_room = null;
+		ResultSet rstype_sensor = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
-			RS = Stmt.executeQuery("SELECT * FROM sensor WHERE id="+id);
+			RS = Stmt.executeQuery("SELECT * FROM sensor WHERE id=" + id);
 
-			while(RS.next()) {
-				rswing_room=Stmt2.executeQuery("SELECT * FROM wing_room WHERE id="+RS.getInt("fk_position"));
-				rstype_sensor=Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id="+RS.getInt("fk_type_sensor"));
+			while (RS.next()) {
+				rswing_room = Stmt2.executeQuery("SELECT * FROM wing_room WHERE id=" + RS.getInt("fk_position"));
+				rstype_sensor = Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id=" + RS.getInt("fk_type_sensor"));
 
-
-				if ( rswing_room.next()  && rstype_sensor.next()) {
+				if (rswing_room.next() && rstype_sensor.next()) {
 					Room room = new Room();
 					room.setId(RS.getInt("fk_room"));
-				
-					sensor = new Sensor(RS.getInt("id"),RS.getString("sensor_name"), RS.getString("ip_address"), RS.getString("mac_address"),
-							dateFormat.parse(RS.getString("date_setup")), RS.getBoolean("status"), RS.getBoolean("installed"),
+
+					sensor = new Sensor(RS.getInt("id"), RS.getString("sensor_name"), RS.getString("ip_address"),
+							RS.getString("mac_address"), dateFormat.parse(RS.getString("date_setup")),
+							RS.getBoolean("status"), RS.getBoolean("installed"),
 							new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
-							RS.getFloat("price"),
-							room,
+							RS.getFloat("price"), room,
 							new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
-									rstype_sensor.getInt("trigger_point_min"),rstype_sensor.getInt("trigger_point_max"),
-									rstype_sensor.getInt("nb_alerts")),
+									rstype_sensor.getInt("trigger_point_min"),
+									rstype_sensor.getInt("trigger_point_max"), rstype_sensor.getInt("nb_alerts")),
 							RS.getInt("scope_sensor"));
 
 				}
-			}	
-		}
-		finally {
+			}
+		} finally {
 			// Closing
-			
-			if(RS!=null)
-				try{RS.close();}catch(Exception e){e.printStackTrace();} 
-			if(rstype_sensor!=null)
-				try{rstype_sensor.close();}catch(Exception e){e.printStackTrace();} 
-			if(rswing_room!=null)
-				try{rswing_room.close();}catch(Exception e){e.printStackTrace();}  
-			if(Stmt!=null)
-				try{Stmt.close();}catch(Exception e){e.printStackTrace();} 
-			if(Stmt2!=null)
-				try{Stmt2.close();}catch(Exception e){e.printStackTrace();} 
-			if(Stmt3!=null)
-				try{Stmt3.close();}catch(Exception e){e.printStackTrace();}  
+
+			if (RS != null)
+				try {
+					RS.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (rstype_sensor != null)
+				try {
+					rstype_sensor.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (rswing_room != null)
+				try {
+					rswing_room.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt != null)
+				try {
+					Stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt2 != null)
+				try {
+					Stmt2.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt3 != null)
+				try {
+					Stmt3.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
 		return sensor;
 	}
 
-	public static boolean create(Sensor sensor) throws SQLException{
+	public static boolean create(Sensor sensor) throws SQLException {
 		Statement Stmt = conn.createStatement();
 		String req = "insert into sensor (sensor_name, ip_address, mac_address,"
 				+ " date_setup, status, installed, fk_position, price, fk_room, fk_type_sensor, scope_sensor)"
-				+ " values ('"+sensor.getSensor_name()+"', '"+sensor.getIp_address()+"', "
-				+ "'"+sensor.getMac_address()+"', '"+sensor.getDate_setup_formatted()+"', "
-				+ ""+sensor.getStatus()+", "+sensor.getInstalled()+", "+sensor.getFk_position().getId()+","
-				+ " "+sensor.getPrice()+", "+sensor.getFk_room().getId()+", "
-				+ ""+sensor.getFk_type_sensor().getId()+", "+sensor.getScope_sensor()+");";
-		int n=0;
+				+ " values ('" + sensor.getSensor_name() + "', '" + sensor.getIp_address() + "', " + "'"
+				+ sensor.getMac_address() + "', '" + sensor.getDate_setup_formatted() + "', " + "" + sensor.getStatus()
+				+ ", " + sensor.getInstalled() + ", " + sensor.getFk_position().getId() + "," + " " + sensor.getPrice()
+				+ ", " + sensor.getFk_room().getId() + ", " + "" + sensor.getFk_type_sensor().getId() + ", "
+				+ sensor.getScope_sensor() + ");";
+		int n = 0;
 		try {
-			n = Stmt.executeUpdate(req);}
-		finally {
+			n = Stmt.executeUpdate(req);
+		} finally {
 			// Closing
-			if(Stmt!=null)
-				try{Stmt.close();}catch(Exception e){e.printStackTrace();}  
-			
-		}
-		return n==1;
-	}
+			if (Stmt != null)
+				try {
+					Stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
+		}
+		return n == 1;
+	}
 
 	public static boolean update(Sensor sensor) throws SQLException {
 		Statement Stmt = conn.createStatement();
 
-		String req = "update sensor set sensor_name='"+sensor.getSensor_name()+"', ip_address='"+sensor.getIp_address()+"', "
-				+ "mac_address='"+sensor.getMac_address()+"',"
-				+ " date_setup='"+sensor.getDate_setup_formatted()+"', status="+sensor.getStatus()+", installed="+sensor.getInstalled()+", "
-				+ "fk_position="+sensor.getFk_position().getId()+", price="+sensor.getPrice()+", "
-				+ "fk_room="+sensor.getFk_room().getId()+", fk_type_sensor="+sensor.getFk_type_sensor().getId()+", "
-				+ "scope_sensor="+sensor.getScope_sensor()+" where id="+sensor.getId()+";";
-		int n=0;
+		String req = "update sensor set sensor_name='" + sensor.getSensor_name() + "', ip_address='"
+				+ sensor.getIp_address() + "', " + "mac_address='" + sensor.getMac_address() + "'," + " date_setup='"
+				+ sensor.getDate_setup_formatted() + "', status=" + sensor.getStatus() + ", installed="
+				+ sensor.getInstalled() + ", " + "fk_position=" + sensor.getFk_position().getId() + ", price="
+				+ sensor.getPrice() + ", " + "fk_room=" + sensor.getFk_room().getId() + ", fk_type_sensor="
+				+ sensor.getFk_type_sensor().getId() + ", " + "scope_sensor=" + sensor.getScope_sensor() + " where id="
+				+ sensor.getId() + ";";
+		int n = 0;
 		try {
-			n = Stmt.executeUpdate(req);}
-		finally {
+			n = Stmt.executeUpdate(req);
+		} finally {
 			// Closing
-			if(Stmt!=null)
-				try{Stmt.close();}catch(Exception e){e.printStackTrace();}  
-			
+			if (Stmt != null)
+				try {
+					Stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 		}
-		return n==1;
+		return n == 1;
 	}
-	//TODO ADD CASCADE CONSTRAINTS ON DELETE IN SCRIPT
-	public static boolean delete(Sensor sensor) throws SQLException{
+
+	// TODO ADD CASCADE CONSTRAINTS ON DELETE IN SCRIPT
+	public static boolean delete(Sensor sensor) throws SQLException {
 		Statement Stmt = conn.createStatement();
-		int n=0;
-		try{
-			n = Stmt.executeUpdate("DELETE FROM sensor WHERE id=" + sensor.getId());}
-		finally {
-			//Closing
-			
-			if(Stmt!=null)
-				try{Stmt.close();}catch(Exception e){e.printStackTrace();} 
+		int n = 0;
+		try {
+			n = Stmt.executeUpdate("DELETE FROM sensor WHERE id=" + sensor.getId());
+		} finally {
+			// Closing
+
+			if (Stmt != null)
+				try {
+					Stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
-		return n==1;
+		return n == 1;
 	}
 
-	public static boolean deleteAll() throws SQLException{
+	public static boolean deleteAll() throws SQLException {
 		Statement Stmt = conn.createStatement();
-		int n=0;
-		try{
-			n = Stmt.executeUpdate("DELETE FROM sensor");System.out.println(n);
-		}finally {
-			//Closing
-			
-			if(Stmt!=null)
-				try{Stmt.close();}catch(Exception e){e.printStackTrace();} ;
+		int n = 0;
+		try {
+			n = Stmt.executeUpdate("DELETE FROM sensor");
+			System.out.println(n);
+		} finally {
+			// Closing
+
+			if (Stmt != null)
+				try {
+					Stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			;
 
 		}
-		return n>0;
+		return n > 0;
 	}
-
 
 	public static int countByFloor(Integer floor) throws SQLException {
-		PreparedStatement pStmt = conn.prepareStatement("SELECT COUNT(*) FROM sensor INNER JOIN room r ON fk_room = r.id  WHERE r.floor=?;");
+		PreparedStatement pStmt = conn
+				.prepareStatement("SELECT COUNT(*) FROM sensor INNER JOIN room r ON fk_room = r.id  WHERE r.floor=?;");
 		pStmt.setInt(1, floor);
 		ResultSet rs = pStmt.executeQuery();
 		rs.next();
 		return rs.getInt(1);
 	}
 
-
 	public static int countByWing(Integer wing) throws SQLException {
-		PreparedStatement pStmt = conn.prepareStatement("SELECT COUNT(*) FROM sensor INNER JOIN room r ON fk_room = r.id  WHERE r.fk_wing_room=?;");
+		PreparedStatement pStmt = conn.prepareStatement(
+				"SELECT COUNT(*) FROM sensor INNER JOIN room r ON fk_room = r.id  WHERE r.fk_wing_room=?;");
 		pStmt.setInt(1, wing);
 		ResultSet rs = pStmt.executeQuery();
 		rs.next();
 		return rs.getInt(1);
 	}
-	
+
 	public static int count() throws SQLException {
 		PreparedStatement pStmt = conn.prepareStatement("SELECT COUNT(*) FROM sensor");
 		ResultSet rs = pStmt.executeQuery();
 		rs.next();
 		return rs.getInt(1);
 	}
-	
+
 	// get all sensors
-	public static ArrayList<Sensor> getSensorsWithPosition() throws SQLException, ParseException{
+	public static ArrayList<Sensor> getSensorsWithPosition() throws SQLException, ParseException {
 		Statement Stmt = conn.createStatement();
 		Statement Stmt2 = conn.createStatement();
 		Statement Stmt3 = conn.createStatement();
@@ -253,285 +314,329 @@ public class SensorManager {
 		Statement Stmt7 = conn.createStatement();
 
 		ArrayList<Sensor> sensorsList = new ArrayList<Sensor>();
-		ResultSet RS=null;
-		ResultSet rswing_room=null;
-		ResultSet rstype_sensor=null;
-		ResultSet rsroom=null;
-		ResultSet rsfloor =null;
-		ResultSet rstype_room=null;
-		ResultSet  rsbuilding = null;
-	
-		
-		
-		
+		ResultSet RS = null;
+		ResultSet rswing_room = null;
+		ResultSet rstype_sensor = null;
+		ResultSet rsroom = null;
+		ResultSet rsfloor = null;
+		ResultSet rstype_room = null;
+		ResultSet rsbuilding = null;
+
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
-			
-				RS = Stmt.executeQuery("SELECT * FROM sensor");
-			
-			
 
-			while(RS.next()) {
-				rswing_room=Stmt2.executeQuery("SELECT * FROM wing_room ");
-				rstype_sensor=Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id="+RS.getInt("fk_type_sensor"));
-				rsroom=Stmt4.executeQuery("SELECT * FROM room ");
-				rsfloor=Stmt5.executeQuery("SELECT * FROM floor_map");
-				rstype_room=Stmt6.executeQuery("SELECT * FROM type_room");
-				rsbuilding=Stmt7.executeQuery("SELECT * FROM building");
-				
+			RS = Stmt.executeQuery("SELECT * FROM sensor");
 
-				if ( rswing_room.next()  && rstype_sensor.next()&& rsroom.next()&& rsfloor.next()&& rsbuilding.next()&& rstype_room.next()) {
-					
+			while (RS.next()) {
+				rswing_room = Stmt2.executeQuery("SELECT * FROM wing_room ");
+				rstype_sensor = Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id=" + RS.getInt("fk_type_sensor"));
+				rsroom = Stmt4.executeQuery("SELECT * FROM room ");
+				rsfloor = Stmt5.executeQuery("SELECT * FROM floor_map");
+				rstype_room = Stmt6.executeQuery("SELECT * FROM type_room");
+				rsbuilding = Stmt7.executeQuery("SELECT * FROM building");
+
+				if (rswing_room.next() && rstype_sensor.next() && rsroom.next() && rsfloor.next() && rsbuilding.next()
+						&& rstype_room.next()) {
+
 					Room room = new Room();
 					RoomManager room_manager = new RoomManager(conn);
-					room = RoomManager.getRoom(RS.getInt("fk_room")); 
-					
-					
-					
-					sensorsList.add(new Sensor(RS.getInt("id"),RS.getString("sensor_name"), RS.getString("ip_address"), RS.getString("mac_address"),
-						    RS.getBoolean("status"), RS.getBoolean("installed"),
+					room = RoomManager.getRoom(RS.getInt("fk_room"));
+
+					sensorsList.add(new Sensor(RS.getInt("id"), RS.getString("sensor_name"), RS.getString("ip_address"),
+							RS.getString("mac_address"), RS.getBoolean("status"), RS.getBoolean("installed"),
 							new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
 							RS.getFloat("price"),
-							new Room(rsroom.getInt("id"),rsroom.getInt("floor"), rsroom.getInt("room_number"), rsroom.getInt("m2"),
+							new Room(rsroom.getInt("id"), rsroom.getInt("floor"), rsroom.getInt("room_number"),
+									rsroom.getInt("m2"),
 									new Type_Room(rstype_room.getInt("id"), rstype_room.getString("name")),
 									new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
-									rsroom.getInt("nb_doors"), rsroom.getInt("nb_windows"),rsroom.getInt("x"),rsroom.getInt("y"),rsroom.getInt("width"),rsroom.getInt("height"),	 
-				        			
-									new Floor(rsfloor.getInt("id"),rsfloor.getString("name"),rsfloor.getString("image_path"),
-				                			new Building(rsbuilding.getInt("id"),rsbuilding.getString("name"),rsbuilding.getString("type")))),
-							
+									rsroom.getInt("nb_doors"), rsroom.getInt("nb_windows"), rsroom.getInt("x"),
+									rsroom.getInt("y"), rsroom.getInt("width"), rsroom.getInt("height"),
+
+									new Floor(rsfloor.getInt("id"), rsfloor.getString("name"),
+											rsfloor.getString("image_path"),
+											new Building(rsbuilding.getInt("id"), rsbuilding.getString("name"),
+													rsbuilding.getString("type")))),
+
 							new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
-									rstype_sensor.getInt("trigger_point_min"),rstype_sensor.getInt("trigger_point_max"),
-									rstype_sensor.getInt("nb_alerts")),
-							RS.getInt("scope_sensor"),RS.getInt("x"),RS.getInt("y")));
-				
+									rstype_sensor.getInt("trigger_point_min"),
+									rstype_sensor.getInt("trigger_point_max"), rstype_sensor.getInt("nb_alerts")),
+							RS.getInt("scope_sensor"), RS.getInt("x"), RS.getInt("y")));
+
 				}
-			}	
-		}
-		finally {
+			}
+		} finally {
 			// Closing
-			
-			if(RS!=null)
-				try{RS.close();}catch(Exception e){e.printStackTrace();} 
-			if(rstype_sensor!=null)
-				try{rstype_sensor.close();}catch(Exception e){e.printStackTrace();} 
-			if(rswing_room!=null)
-				try{rswing_room.close();}catch(Exception e){e.printStackTrace();}  
-			if(Stmt!=null)
-				try{Stmt.close();}catch(Exception e){e.printStackTrace();} 
-			if(Stmt2!=null)
-				try{Stmt2.close();}catch(Exception e){e.printStackTrace();} 
-			if(Stmt3!=null)
-				try{Stmt3.close();}catch(Exception e){e.printStackTrace();} 
-			if(Stmt4!=null)
-				try{Stmt4.close();}catch(Exception e){e.printStackTrace();}
+
+			if (RS != null)
+				try {
+					RS.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (rstype_sensor != null)
+				try {
+					rstype_sensor.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (rswing_room != null)
+				try {
+					rswing_room.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt != null)
+				try {
+					Stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt2 != null)
+				try {
+					Stmt2.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt3 != null)
+				try {
+					Stmt3.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt4 != null)
+				try {
+					Stmt4.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
 		return sensorsList;
 	}
+
 	// get all sensors by Romm id
-	public static ArrayList<Sensor> getSensorsInRoom(int idRoom) throws SQLException, ParseException{
-		
+	public static ArrayList<Sensor> getSensorsInRoom(int idRoom) throws SQLException, ParseException {
+
 		Statement Stmt = conn.createStatement();
 		Statement Stmt2 = conn.createStatement();
 		Statement Stmt3 = conn.createStatement();
-		
-		
+
 		ArrayList<Sensor> sensorsList = new ArrayList<Sensor>();
-		ResultSet RS=null;
-		ResultSet rswing_room=null;
-		ResultSet rstype_sensor=null;
+		ResultSet RS = null;
+		ResultSet rswing_room = null;
+		ResultSet rstype_sensor = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
-		String SQL_SELECT = "SELECT * FROM  sensor WHERE fk_room="+ idRoom;
+
+		String SQL_SELECT = "SELECT * FROM  sensor WHERE fk_room=" + idRoom;
 		try {
-		
-	    RS = Stmt.executeQuery(SQL_SELECT);
-		
-		while (RS.next()) {
-			
-			rswing_room=Stmt2.executeQuery("SELECT * FROM wing_room ");
-			rstype_sensor=Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id="+RS.getInt("fk_type_sensor"));
-			
-			if ( rswing_room.next()  && rstype_sensor.next()){
-			
-			Room room = new Room();
-			
-			for (Room r : RoomManager.getAllRoomsWithPostion())
-			{
-				if (r.getId()==idRoom) {
-					
-					room=r;
-					System.out.println(room);
-					
+
+			RS = Stmt.executeQuery(SQL_SELECT);
+
+			while (RS.next()) {
+
+				rswing_room = Stmt2.executeQuery("SELECT * FROM wing_room ");
+				rstype_sensor = Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id=" + RS.getInt("fk_type_sensor"));
+
+				if (rswing_room.next() && rstype_sensor.next()) {
+
+					Room room = new Room();
+
+					for (Room r : RoomManager.getAllRoomsWithPostion()) {
+						if (r.getId() == idRoom) {
+
+							room = r;
+							System.out.println(room);
+
+						}
+					}
+
+					sensorsList.add(new Sensor(RS.getInt("id"), RS.getString("sensor_name"), RS.getString("ip_address"),
+							RS.getString("mac_address"), RS.getBoolean("status"), RS.getBoolean("installed"), null,
+							// new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
+							RS.getFloat("price"), room,
+							new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
+									rstype_sensor.getInt("trigger_point_min"),
+									rstype_sensor.getInt("trigger_point_max"), rstype_sensor.getInt("nb_alerts")),
+							RS.getInt("scope_sensor"), RS.getInt("x"), RS.getInt("y")));
 				}
+
 			}
-			
-			
-			sensorsList.add(new Sensor(RS.getInt("id"),RS.getString("sensor_name"), RS.getString("ip_address"), RS.getString("mac_address"),
-					 RS.getBoolean("status"), RS.getBoolean("installed"),
-					null,
-					//new Wing_Room(rswing_room.getInt("id"), rswing_room.getString("name")),
-					RS.getFloat("price"),
-					room,
-					new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
-							rstype_sensor.getInt("trigger_point_min"),rstype_sensor.getInt("trigger_point_max"),
-							rstype_sensor.getInt("nb_alerts")),
-					RS.getInt("scope_sensor"),RS.getInt("x"),RS.getInt("y")));
-			 }	
-        			
-		 }
-	 }   
-	finally {
-		// Closing
-		
-		if(RS!=null)
-			try{RS.close();}catch(Exception e){e.printStackTrace();} 
-		if(rstype_sensor!=null)
-			try{rstype_sensor.close();}catch(Exception e){e.printStackTrace();} 
-		if(rswing_room!=null)
-			try{rswing_room.close();}catch(Exception e){e.printStackTrace();}  
-		if(Stmt!=null)
-			try{Stmt.close();}catch(Exception e){e.printStackTrace();} 
-		if(Stmt2!=null)
-			try{Stmt2.close();}catch(Exception e){e.printStackTrace();} 
-		if(Stmt3!=null)
-			try{Stmt3.close();}catch(Exception e){e.printStackTrace();} 
-		
-			}		
-		
+		} finally {
+			// Closing
+
+			if (RS != null)
+				try {
+					RS.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (rstype_sensor != null)
+				try {
+					rstype_sensor.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (rswing_room != null)
+				try {
+					rswing_room.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt != null)
+				try {
+					Stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt2 != null)
+				try {
+					Stmt2.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (Stmt3 != null)
+				try {
+					Stmt3.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+		}
+
 		return sensorsList;
 	}
-	
-	
-	
-	
-public static ArrayList<Sensor> getSensorsNotInstalled() throws SQLException, ParseException{
-		
+
+	public static ArrayList<Sensor> getSensorsNotInstalled() throws SQLException, ParseException {
+
 		Statement Stmt = conn.createStatement();
-		
+
 		Statement Stmt3 = conn.createStatement();
-		
-		
+
 		ArrayList<Sensor> sensorsList = new ArrayList<Sensor>();
-		ResultSet RS=null;
-		
-		ResultSet rstype_sensor=null;
+		ResultSet RS = null;
+
+		ResultSet rstype_sensor = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-				
+
 		String SQL_SELECT = "SELECT * FROM  sensor WHERE x IS NULL AND y IS NULL AND installed IS FALSE";
 		try {
-		
-	    RS = Stmt.executeQuery(SQL_SELECT);
-		
-		while (RS.next()) {
-			
-			
-			rstype_sensor=Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id="+RS.getInt("fk_type_sensor"));
-			
-			if (  rstype_sensor.next()){
-			
-			sensorsList.add(new Sensor(RS.getInt("id"),RS.getString("sensor_name"), RS.getString("ip_address"), RS.getString("mac_address"),
-					RS.getBoolean("status"), RS.getBoolean("installed"),
-					null,
-					RS.getFloat("price"),
-					null,
-					new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
-							rstype_sensor.getInt("trigger_point_min"),rstype_sensor.getInt("trigger_point_max"),
-							rstype_sensor.getInt("nb_alerts")),
-					RS.getInt("scope_sensor"),RS.getInt("x"),RS.getInt("y")));
-			 }	
-        			
-		 }
-	 }   
-	finally {
-		// Closing
-		
-		if(RS!=null)
-			try{RS.close();}catch(Exception e){e.printStackTrace();} 
-		if(rstype_sensor!=null)
-			try{rstype_sensor.close();}catch(Exception e){e.printStackTrace();} 
-		
-		if(Stmt!=null)
-			try{Stmt.close();}catch(Exception e){e.printStackTrace();} 
-		 
-		if(Stmt3!=null)
-			try{Stmt3.close();}catch(Exception e){e.printStackTrace();} 
-		
-			}		
-		
+
+			RS = Stmt.executeQuery(SQL_SELECT);
+
+			while (RS.next()) {
+
+				rstype_sensor = Stmt3.executeQuery("SELECT * FROM type_sensor WHERE id=" + RS.getInt("fk_type_sensor"));
+
+				if (rstype_sensor.next()) {
+
+					sensorsList.add(new Sensor(RS.getInt("id"), RS.getString("sensor_name"), RS.getString("ip_address"),
+							RS.getString("mac_address"), RS.getBoolean("status"), RS.getBoolean("installed"), null,
+							RS.getFloat("price"), null,
+							new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
+									rstype_sensor.getInt("trigger_point_min"),
+									rstype_sensor.getInt("trigger_point_max"), rstype_sensor.getInt("nb_alerts")),
+							RS.getInt("scope_sensor"), RS.getInt("x"), RS.getInt("y")));
+				}
+
+			}
+		} finally {
+			// Closing
+
+			if (RS != null)
+				try {
+					RS.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			if (rstype_sensor != null)
+				try {
+					rstype_sensor.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			if (Stmt != null)
+				try {
+					Stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			if (Stmt3 != null)
+				try {
+					Stmt3.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+		}
+
 		return sensorsList;
 	}
-public static boolean createSensor(Sensor sensor) throws SQLException{
 
-	
-	try {
-	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
-	String sql = "INSERT INTO Sensor (sensor_name, ip_address, mac_address, status, installed, fk_position, price, fk_room, fk_type_sensor, scope_sensor,x,y) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?)";
-	int n=0;
-	
-	PreparedStatement preparedstatement = conn.prepareStatement(sql);
-	preparedstatement.setObject(1, sensor.getSensor_name());
-	preparedstatement.setObject(2, null);
-	preparedstatement.setObject(3,  null);
-	//preparedstatement.setObject(4, sensor.getDate_setup_formatted());
-	preparedstatement.setObject(4, true);
-	preparedstatement.setObject(5, true);
-	preparedstatement.setObject(6, 1);
-	preparedstatement.setObject(7, null);
-	preparedstatement.setObject(8, sensor.getFk_room().getId());
-	preparedstatement.setObject(9, sensor.getFk_type_sensor().getId());
-	preparedstatement.setObject(10, 10);
-	preparedstatement.setObject(11, sensor.getX());
-	preparedstatement.setObject(12, sensor.getY());
-	
-	System.out.println(preparedstatement);
-	n = preparedstatement.executeUpdate();
-	
-	
-	preparedstatement.close();
-	return n==1;
-	}catch(SQLException e) {
-		e.printStackTrace();
-	}
-	return false;
-}
+	public static boolean createSensor(Sensor sensor) throws SQLException {
 
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-  
-	public static boolean updateSensor2(Sensor sensor)throws SQLException  {
+			String sql = "INSERT INTO Sensor (sensor_name, ip_address, mac_address, status, installed, fk_position, price, fk_room, fk_type_sensor, scope_sensor,x,y) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?)";
+			int n = 0;
 
-		 
-		 try {
+			PreparedStatement preparedstatement = conn.prepareStatement(sql);
+			preparedstatement.setObject(1, sensor.getSensor_name());
+			preparedstatement.setObject(2, sensor.getIp_address());
+			preparedstatement.setObject(3, sensor.getMac_address());
+			preparedstatement.setObject(4, true);
+			preparedstatement.setObject(5, false);
+			preparedstatement.setObject(6, null);
+			preparedstatement.setObject(7, sensor.getPrice());
+			preparedstatement.setObject(8, null);
+			preparedstatement.setObject(9, sensor.getFk_type_sensor().getId());
+			preparedstatement.setObject(10, 10);
+			preparedstatement.setObject(11, null);
+			preparedstatement.setObject(12, null);
 
-	
-		 PreparedStatement pstmt = null;
-		 
-		 int n=0;
-		 
-		 
-		 pstmt = conn.prepareStatement("UPDATE sensor SET installed = ? , fk_room= ?, x= ?, y= ?  WHERE id = ? ");
-		 
-		 System.out.println(sensor.getFk_room_id());
-		 	 
-			 pstmt.setBoolean(1, sensor.getInstalled());
-			 pstmt.setObject(2,  (Integer)sensor.getFk_room_id());
-			 pstmt.setObject(3, (Integer) sensor.getX());
-			 pstmt.setObject(4, (Integer)sensor.getY());
-			 //pstmt.setString(5, sensor.getDate_setup_formatted());
-			 pstmt.setObject(5, (Integer)sensor.getId());
-			
-			 System.out.println(pstmt);
-			 
-			 n = pstmt.executeUpdate();
-		     
-			 pstmt.close();
-			 return n==1;
-		 	}catch(SQLException e) {
-		 		e.printStackTrace();
-		 	}
+			System.out.println(preparedstatement);
+			n = preparedstatement.executeUpdate();
+
+			preparedstatement.close();
+			return n == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
-		
-      }
+	}
+
+	public static boolean updateSensor2(Sensor sensor) throws SQLException {
+
+		try {
+
+			PreparedStatement pstmt = null;
+
+			int n = 0;
+
+			pstmt = conn.prepareStatement("UPDATE sensor SET installed = ? , fk_room= ?, x= ?, y= ?  WHERE id = ? ");
+
+			System.out.println(sensor.getFk_room_id());
+
+			pstmt.setBoolean(1, sensor.getInstalled());
+			pstmt.setObject(2, (Integer) sensor.getFk_room_id());
+			pstmt.setObject(3, (Integer) sensor.getX());
+			pstmt.setObject(4, (Integer) sensor.getY());
+			// pstmt.setString(5, sensor.getDate_setup_formatted());
+			pstmt.setObject(5, (Integer) sensor.getId());
+
+			System.out.println(pstmt);
+
+			n = pstmt.executeUpdate();
+
+			pstmt.close();
+			return n == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+
+	}
 }
