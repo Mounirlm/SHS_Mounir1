@@ -38,7 +38,7 @@ public class MapSHS extends JFrame implements IUpdatable {
 	private JPanel panW;
 	private JPanel panE;
 	private JPanel panS;
-	
+
 	private JLabel jLS;
 
 	private JPanel panFloor;
@@ -57,20 +57,17 @@ public class MapSHS extends JFrame implements IUpdatable {
 	private JPanel panInfoSensorInstalledInFloor;
 	private JButton jbSearchInfoSensorInFloor;
 	private JLabel jLInfoSensor;
-	
-	
-	private final String[] entetes = { "Sensor_Name", "Sensor_Type", "Room_Number", "X_position", "Y_position", "Price", "Mac_address",
-			"IP_address", "State"};
+
+	private final String[] entetes = { "Sensor_Name", "Sensor_Type", "Room_Number", "X_position", "Y_position", "Price",
+			"Mac_address", "IP_address", "State" };
 
 	private JLabel labels[] = new JLabel[9];
-	
+
 	MapPanelView plan;
 	Building building;
 	BuildingController buildingController;
 	Floor floor;
 	Stock stock;
-	
-	
 
 	public MapSHS(String name) {
 		super(name);
@@ -96,62 +93,59 @@ public class MapSHS extends JFrame implements IUpdatable {
 			building.setStock(stock);
 
 		} catch (IOException | ClassNotFoundException | SQLException e2) {
-			
+
 			e2.printStackTrace();
 		}
-		
+
 		plan = new MapPanelView(building);
 
 		plan.addUpdatableListener(this);// pattern Observer Observable
-		// plan ne doit pas avoir de lien avec ihm donc ihm s'inscrit comme listener du plan
+		// plan ne doit pas avoir de lien avec ihm donc ihm s'inscrit comme listener du
+		// plan
 
 		panN = new JPanel();
 		panW = new JPanel();
 		panE = new JPanel();
 		panS = new JPanel();
-		
-		
+
 		jLS = new JLabel();
 		jLS.setText("AutonHome SHS Copyright");
 		jLS.setForeground(Color.WHITE);
 		jLS.setHorizontalAlignment(JLabel.CENTER);
-		jLS.setFont(new Font("Arial", Font.BOLD, 12));
-		
+		jLS.setFont(new Font("Arial", Font.BOLD, 13));
+
 		panS.setBackground(ColorsApp.getBgThem());
 		panS.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		panS.add(jLS);
-		
 
 		panFloor = new JPanel();
 		panFloor.setLayout(new GridLayout(3, 1));
-		
-		
+
 		jLInfoSensor = new JLabel("SENSOR INFO", SwingConstants.CENTER);
 		Border bord = BorderFactory.createLineBorder(Color.BLACK);
 		jLInfoSensor.setBorder(bord);
+		jLInfoSensor.setForeground(Color.BLACK);
 		jLInfoSensor.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
 		jLInfoSensor.setHorizontalAlignment(JLabel.CENTER);
 
-		
 		mapTitle = new JLabel();
 		mapTitle.setText("MAP");
 		mapTitle.setForeground(Color.WHITE);
 		mapTitle.setHorizontalAlignment(JLabel.CENTER);
-		mapTitle.setFont(new Font("Arial", Font.BOLD, 15));
-		
+		mapTitle.setFont(new Font("Arial", Font.BOLD, 17));
+
 		panN.setBackground(ColorsApp.getBgThem());
 		panN.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		panN.add(mapTitle);
 
 		panW.setLayout(new GridLayout(2, 1));
 		panW.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-		
+
 		panE.setLayout(new GridLayout(8, 1));
 
 		panInfoSensorInstalledInFloor = new JPanel();
 		panInfoSensorInstalledInFloor.setLayout(new GridLayout(10, 1));
 		panInfoSensorInstalledInFloor.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
 
 		jbSearchInfoSensorInFloor = new JButton("SEARCH INFO");
 
@@ -161,8 +155,7 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 		}
 
-
-		StockList = new JLabel("STOCK", SwingConstants.CENTER);
+		StockList = new JLabel("MAPPING BY DRAG AND DROP", SwingConstants.CENTER);
 		StockList.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
 		StockList.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		StockList.setBackground(ColorsApp.getBgThem());
@@ -179,7 +172,6 @@ public class MapSHS extends JFrame implements IUpdatable {
 				update();
 			}
 		});
-
 
 		floors = new ArrayList<Floor>();
 
@@ -224,9 +216,8 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 			}
 		});
-		
-		
-		jLSensorId = new JLabel("SENSOR", SwingConstants.CENTER);
+
+		jLSensorId = new JLabel("SENSOR BY ID", SwingConstants.CENTER);
 		jLSensorId.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		jLSensorId.setFont(new Font("Arial", Font.CENTER_BASELINE, 15));
 		jLSensorId.setHorizontalAlignment(JLabel.CENTER);
@@ -237,13 +228,12 @@ public class MapSHS extends JFrame implements IUpdatable {
 		panW.add(panFloor);
 		panW.add(panInfoSensorInstalledInFloor);
 
-	
 		jtxSensorId = new JTextField();
+		jtxSensorId.setToolTipText("Please Enter an Integer as ID sensor.");
 		jbRemoveToStockSensor = new JButton("REMOVE SENSOR TO STOCK");
 		jbRemoveToStockSensor.setPreferredSize(new Dimension(40, 40));
 		jbRefresh = new JButton("REFRESH");
 		jbRefresh.setPreferredSize(new Dimension(40, 40));
-		
 
 		jtxSensorId.addKeyListener(new java.awt.event.KeyAdapter() {
 			public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -255,9 +245,6 @@ public class MapSHS extends JFrame implements IUpdatable {
 				}
 			}
 		});
-		
-
-
 
 		jbRemoveToStockSensor.addActionListener(new ActionListener() {
 
@@ -294,8 +281,6 @@ public class MapSHS extends JFrame implements IUpdatable {
 								jtxSensorId.setText("");
 								return;
 							} else {
-								
-								
 
 								for (Room r : f.getRoom()) {
 									if (r.getId().equals(selected.getFk_room().getId())) {
@@ -324,8 +309,7 @@ public class MapSHS extends JFrame implements IUpdatable {
 								}
 								plan.getCurrent_floor().getSensors().remove(selected);
 								plan.building.getStock().getSensors().add(selected);
-								
-								
+
 								update();
 
 							}
@@ -361,7 +345,6 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 						for (Sensor s : f.getSensors()) {
 
-							
 							if (s.getId() == Integer.parseInt(jtxSensorId.getText())) {
 								selected = s;
 								jtxSensorId.setText("");
@@ -379,21 +362,16 @@ public class MapSHS extends JFrame implements IUpdatable {
 							jtxSensorId.setText("");
 							return;
 						} else {
-								
-							        String info[] = { selected.getSensor_name(), selected.getFk_type_sensor().getName(),
+
+							String info[] = { selected.getSensor_name(), selected.getFk_type_sensor().getName(),
 									selected.getFk_room().getRoom_number().toString(), selected.getX().toString(),
 									selected.getY().toString(), selected.getPrice().toString(),
 									selected.getMac_address(), selected.getIp_address(), selected.getState().name() };
 
-						    						        
 							for (int i = 0; i < info.length; i++) {
 								labels[i].setText(" " + entetes[i] + " : " + info[i]);
 							}
-							
-					
-								
-							
-						
+
 						}
 
 					}
@@ -401,53 +379,45 @@ public class MapSHS extends JFrame implements IUpdatable {
 				}
 			}
 		});
-		
+
 		jbRefresh.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				Floor f = (Floor) jcomboFloor.getSelectedItem();
-				
-				if(f==null) {
-					
-					JOptionPane.showMessageDialog(MapSHS.this,
-							"Please : Select an floor first ");
-				}
-				else 
-				{
-				try {
-					building = buildingController.getBuilding();
-				} catch (IOException e1) {
-					
-					e1.printStackTrace();
-				}
-				try {
 
-					f.setRoom((buildingController.getRoomListInFloor(f.getId())));
-					buildingController.setSensorInROOM(f);
+				if (f == null) {
 
-					ArrayList<Sensor> sensor2 = new ArrayList<>();
-					
-					for (Room r : f.getRoom()) {
+					JOptionPane.showMessageDialog(MapSHS.this, "Please : Select an floor first ");
+				} else {
+					try {
+						building = buildingController.getBuilding();
+					} catch (IOException e1) {
 
-						sensor2.addAll(r.getSensors());
+						e1.printStackTrace();
+					}
+					try {
+
+						f.setRoom((buildingController.getRoomListInFloor(f.getId())));
+						buildingController.setSensorInROOM(f);
+
+						ArrayList<Sensor> sensor2 = new ArrayList<>();
+
+						for (Room r : f.getRoom()) {
+
+							sensor2.addAll(r.getSensors());
+						}
+
+						itemsListStock.setListData(buildingController.getSensorsNotInstalled().toArray());
+
+					} catch (IOException e2) {
+
+						e2.printStackTrace();
 					}
 
-				
-					itemsListStock.setListData(buildingController.getSensorsNotInstalled().toArray());
-					
-					
-
-
-				} catch (IOException e2) {
-
-					e2.printStackTrace();
 				}
-				
-				}
-						
-				
+
 			}
 		});
 
@@ -482,15 +452,12 @@ public class MapSHS extends JFrame implements IUpdatable {
 		});
 
 	}
-	
-	
 
 	// MapSHS implements IUpdatable
 	public void update() {
 
 		Floor f = (Floor) jcomboFloor.getSelectedItem();
 		itemsListStock.setListData(building.getStock().getSensorArray());
-		
 
 	}
 
@@ -501,8 +468,5 @@ public class MapSHS extends JFrame implements IUpdatable {
 	public void setFloor(Floor floor) {
 		this.floor = floor;
 	}
-	
-	
 
-	
 }
