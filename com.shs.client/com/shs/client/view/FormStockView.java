@@ -464,7 +464,7 @@ public class FormStockView extends JDialog {
 		MaskFormatter mask = null;
 		try {
 			mask = new MaskFormatter("192.168.020.###");
-			mask.setPlaceholderCharacter('0');
+			mask.setPlaceholderCharacter('_');
 		} catch (ParseException e) {
 
 			e.printStackTrace();
@@ -480,7 +480,7 @@ public class FormStockView extends JDialog {
 		MaskFormatter mask = null;
 		try {
 			mask = new MaskFormatter("HH:HH:HH:HH:HH:HH");
-			mask.setPlaceholderCharacter('0');
+			mask.setPlaceholderCharacter('_');
 
 		} catch (ParseException e) {
 
