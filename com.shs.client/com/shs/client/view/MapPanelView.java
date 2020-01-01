@@ -82,14 +82,17 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 						selected.setInstalled(true);
 						Date dte = new Date();
 						selected.setDate_setup(dte);
-						
-						if(r.isTypeSensorInRoom(selected)){
-							JOptionPane.showMessageDialog(MapPanelView.this, "YOU CAN NOT HAVE 2 SENSORS OF THE SAME TYPE IN A ROOM : "
-							 		+ " PLEASE CLICK ON REFRESH ");
-						
-							 dtde.rejectDrop();
-							 
-							 return;
+
+						// test if type of sensor already exist
+
+						if (r.isTypeSensorInRoom(selected)) {
+							JOptionPane.showMessageDialog(MapPanelView.this,
+									"BE CAREFUL NOT INSTALL 2 SENSORS OF THE SAME TYPE IN A ROOM : "
+											+ " PLEASE CLICK ON REFRESH ");
+
+							dtde.rejectDrop();
+
+							return;
 						}
 
 					}
@@ -105,10 +108,8 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 				selected.setFk_room(room);
 				MapPanelView.this.building.getStock().getSensors().remove(selected);
 				MapPanelView.this.getCurrent_floor().getSensors().add(selected);
-				activateListener();				
-				sensorToUpdate=selected;
-				
-					
+				activateListener();
+				sensorToUpdate = selected;
 
 			}
 		});
@@ -151,14 +152,12 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 			return;
 
 		g.drawImage(current_floor.getFloorImage(), 0, 0, null);
-		
+
 		for (Room r : current_floor.getRoom()) {
 
 			for (Sensor s : r.getSensors()) {
-				
-				
+
 				g.drawRect(s.getX(), s.getY(), 30, 30);
-				
 
 				if (s.getState().equals(SensorState.Marche)) {
 					g.setColor(Color.GREEN);
@@ -167,7 +166,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 
 				else if (s.getState().equals(SensorState.Alert)) {
 					int millis = (int) (System.currentTimeMillis() / 1000);
-					
+
 					if (millis % 2 == 0) {
 						g.setColor(Color.RED);
 
