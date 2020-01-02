@@ -152,7 +152,7 @@ public class FormStockView extends JDialog {
 
 		ip_addressField = new JFormattedTextField(getMaskIP());
 		ip_addressField.setBounds(140, 275, 160, 30);
-		ip_addressField.setToolTipText("Please Enter an Number between [1 to 255]");
+		ip_addressField.setToolTipText("Please Enter an Number between [1 to 254]");
 		mac_addressField = new JFormattedTextField(getMaskMAC());
 		mac_addressField.setBounds(140, 240, 160, 30);
 
@@ -206,6 +206,18 @@ public class FormStockView extends JDialog {
 
 					if (typeField.getText().equals("")) {
 						JOptionPane.showMessageDialog(FormStockView.this, "TYPE must not be blank");
+					}
+					
+					else if(nameField.getText().equals("sensor-1g-000")) {
+						JOptionPane.showMessageDialog(FormStockView.this, "NAME must be completed by 3 digits ");
+					}
+					
+					else if(ip_addressField.getText().equals("192.168.020.000")||ip_addressField.getText().equals("192.168.020.255")) {
+						JOptionPane.showMessageDialog(FormStockView.this, "IP must not be blank and different than 192.168.020.000 or 192.168.020.255");
+					}
+					
+					else if(mac_addressField.getText().equals("00:00:00:00:00:00")) {
+						JOptionPane.showMessageDialog(FormStockView.this, "MAC must not be blank");
 					}
 
 					else {
@@ -464,7 +476,7 @@ public class FormStockView extends JDialog {
 		MaskFormatter mask = null;
 		try {
 			mask = new MaskFormatter("192.168.020.###");
-			mask.setPlaceholderCharacter('_');
+			mask.setPlaceholderCharacter('0');
 		} catch (ParseException e) {
 
 			e.printStackTrace();
@@ -480,7 +492,7 @@ public class FormStockView extends JDialog {
 		MaskFormatter mask = null;
 		try {
 			mask = new MaskFormatter("HH:HH:HH:HH:HH:HH");
-			mask.setPlaceholderCharacter('_');
+			mask.setPlaceholderCharacter('0');
 
 		} catch (ParseException e) {
 
