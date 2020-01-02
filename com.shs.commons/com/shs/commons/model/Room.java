@@ -223,8 +223,8 @@ public class Room implements Comparable<Room>{
 
 	public boolean isTypeSensorInRoom(Sensor sensor)
 	{   
-		for(Sensor s : this.getSensors()) {
-			if (sensor.getFk_type_sensor()==s.getFk_type_sensor()){
+		for(Sensor s : getSensors()) {
+			if (sensor.getFk_type_sensor().equals(s.getFk_type_sensor())){
 				return true;
 			}
 		}
