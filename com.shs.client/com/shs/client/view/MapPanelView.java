@@ -59,7 +59,6 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 				dtde.acceptDrop(dtde.getDropAction());
 				Sensor selected = null;
 				Room room = null;
-				boolean success = false;
 				try {
 					selected = (Sensor) dtde.getTransferable().getTransferData(Sensor.SENSOR_DATA_FLAVOR);
 
@@ -69,49 +68,45 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 
 				if (selected == null)
 					return;
-
+				
 				for (Room r : current_floor.getRoom()) {
 
-					if (r.isPointInRoom(dtde.getLocation())) {
-
+					if (r.isPointInRoom(dtde.getLocation())) 
+					{
+						
 						room = r;
 						room.getSensors().add(selected);
 						selected.setX((int) dtde.getLocation().getX());
 						selected.setY((int) dtde.getLocation().getY());
 						selected.setFk_room_id(r.getId());
+						
 						selected.setInstalled(true);
 						Date dte = new Date();
 						selected.setDate_setup(dte);
+						
+						try {
+							bc.update(selected);
 
-						// test if type of sensor already exist
+						} catch (IOException | SQLException e) {
 
-						if (r.isTypeSensorInRoom(selected)) {
-							JOptionPane.showMessageDialog(MapPanelView.this,
-									"BE CAREFUL NOT INSTALL 2 SENSORS OF THE SAME TYPE IN A ROOM : "
-											+ " PLEASE CLICK ON REFRESH ");
-
-							dtde.rejectDrop();
-
-							return;
+							e.printStackTrace();
 						}
-
+						selected.setFk_room(room);
+						MapPanelView.this.building.getStock().getSensors().remove(selected);
+						MapPanelView.this.getCurrent_floor().getSensors().add(selected);
+						activateListener();
+						
 					}
+						
+				
 				}
-
-				try {
-					bc.update(selected);
-
-				} catch (IOException | SQLException e) {
-
-					e.printStackTrace();
+				
+		
+				
+						
+				
 				}
-				selected.setFk_room(room);
-				MapPanelView.this.building.getStock().getSensors().remove(selected);
-				MapPanelView.this.getCurrent_floor().getSensors().add(selected);
-				activateListener();
-				sensorToUpdate = selected;
-
-			}
+						
 		});
 
 	}
