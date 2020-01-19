@@ -50,6 +50,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		// DropTarget est un objet associé à un composant indiquant que celui-ci peut
 		// recevoir un DnD
 		// on active le drop sur le PLAN
+		
 		this.setTransferHandler(new MyTransferHandler());
 
 		this.setDropTarget(new DropTarget() {
@@ -73,6 +74,18 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 
 					if (r.isPointInRoom(dtde.getLocation())) 
 					{
+						// Test if exist two sensors of same type
+						if(r.isTypeSensorInRoom(selected)) 
+						{
+							selected=null;
+							JOptionPane.showMessageDialog(MapPanelView.this,
+									"Please, You can not install 2 sensors of same type in a room");
+							
+							return;
+							
+						}
+						
+					
 						
 						room = r;
 						room.getSensors().add(selected);
@@ -95,18 +108,12 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 						MapPanelView.this.building.getStock().getSensors().remove(selected);
 						MapPanelView.this.getCurrent_floor().getSensors().add(selected);
 						activateListener();
-						
+						}
 					}
 						
 				
 				}
-				
-		
-				
-						
-				
-				}
-						
+					
 		});
 
 	}
