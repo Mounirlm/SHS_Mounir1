@@ -22,6 +22,8 @@ public class Room implements Comparable<Room>{
 	
 	
 	private ArrayList<Sensor> sensors;
+	
+	public Room() {}
 
 	public Room(Integer id, Integer floor, Integer room_number, Integer m2, Type_Room type_room, Wing_Room wing_room,
 			int nb_doors, int nb_windows) {
@@ -56,8 +58,6 @@ public class Room implements Comparable<Room>{
 		
 	}
 	
-	
-
 	public Room(Integer x,Integer y,Integer width, Integer height,Floor fk_floor) {
 		this.x=x;
 		this.y=y;
@@ -66,13 +66,21 @@ public class Room implements Comparable<Room>{
 		this.fk_floor_map=fk_floor;
 	}
 	
-	public Room() {
-		
-	}
+	
 	
 	public boolean isPointInRoom(Point p)
 	{
 		return (p.getX()>this.x && p.getY()>this.y && p.getX()<this.x+this.width && p.getY()<this.y+this.height);
+	}
+	
+	public boolean isTypeSensorInRoom(Sensor sensor)
+	{   
+		for(Sensor s : this.getSensors()) {
+			if (sensor.getFk_type_sensor().getName().equals(s.getFk_type_sensor().getName())){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Integer getId() {
@@ -221,16 +229,7 @@ public class Room implements Comparable<Room>{
 			return 0;
 	}
 
-	public boolean isTypeSensorInRoom(Sensor sensor)
-	{   
-		for(Sensor s : this.getSensors()) {
-			if (sensor.getFk_type_sensor().getName().equals(s.getFk_type_sensor().getName())){
-				return true;
-			}
-		}
-		return false;
-	}
-
+	
 	@Override
 	public String toString() {
 		return "Room [id=" + id + ", floor=" + floor + ", room_number=" + room_number + ", m2=" + m2 + ", type_room="
