@@ -4,7 +4,9 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -293,16 +295,16 @@ public class Sensor implements Transferable {
 		
 		File f = new File("log.txt");
 		
-//		Log.AddLog("L'état du capteur a changé vers :" + ss.toString(), String.valueOf(getIdSensor()), dateFormat.format(date));
-//        try {
-//			Log.saveToFile(f);
-//		} catch (FileNotFoundException e) {
-//			
-//			e.printStackTrace();
-//		} catch (UnsupportedEncodingException e) {
-//			
-//			e.printStackTrace();
-//		}
+		Log.AddLog("L'état du capteur a changé vers :" + ss.toString(), String.valueOf(getId()), dateFormat.format(date));
+        try {
+			Log.saveToFile(f);
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			
+			e.printStackTrace();
+		}
 	}
 	
 	
