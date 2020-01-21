@@ -1,0 +1,8 @@
+Log [text=L'état du capteur a changé vers :Alert, sensorName=4, date=2020/01/21 23:09:38]
+Log [text=L'état du capteur a changé vers :Arret, sensorName=4, date=2020/01/21 23:09:38]
+Log [text=L'état du capteur a changé vers :Marche, sensorName=4, date=2020/01/21 23:09:39]
+Log [text=L'état du capteur a changé vers :Alert, sensorName=4, date=2020/01/21 23:09:40]
+Log [text=L'état du capteur a changé vers :Arret, sensorName=4, date=2020/01/21 23:09:42]
+Log [text=L'état du capteur a changé vers :Marche, sensorName=4, date=2020/01/21 23:09:42]
+Log [text=L'état du capteur a changé vers :Alert, sensorName=4, date=2020/01/21 23:09:43]
+Log [text=L'état du capteur a changé vers :Arret, sensorName=4, date=2020/01/21 23:09:44]
