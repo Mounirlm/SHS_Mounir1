@@ -10,8 +10,6 @@
     LC_CTYPE = 'French_France.1252'
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;*/
-	
-
 
 create table users (
 	id serial primary key,
@@ -143,7 +141,7 @@ create table historical
 
 /* USERS*/
 insert into users(first_name,last_name,email, password, function) values('kadia','toure','k.toure@shs.com','admin','supervisory officer');	
-insert into users(first_name,last_name,email, password, function) values('louis','michel','l.michel@shs.com','123','direction');
+insert into users(first_name,last_name,email, password, function) values('louis','michel','l.michel@shs.com','admin','direction');
 insert into users(first_name,last_name,email, password, function) values('mounir','lemharzi','mounir@shs.com','admin','direction');	
 /* TYPE ROOM*/	
 insert into type_room (name) values ('bedroom');
@@ -177,30 +175,30 @@ insert into floor_map(name,image_path,fk_building) values('floor1','.\ressources
 
 /*bedroom mounir       */
 insert into room (floor, room_number, m2, fk_type_room, fk_wing_room, nb_doors, nb_windows,x,y,width,height,fk_floor_map) 
-values (1,101,15,1, 1, 1,2,10,160,190,75,1),
- (1,102,15,1, 1, 1,2, 10,235,190,76, 1),
- (1,103,15,1, 1, 1,2, 10,311,190,89, 1),
- (1,104,15,1, 1, 1,2, 10,400,190,86,1),
- (1,105,15,1, 1, 1,2, 10,486,190,82,1),
- (1,106,15,1, 1, 1,2, 627,164,165,73,1),
- (1,107,15,1, 1, 1,2, 627,237,165,74,1),
- (1,108,15,1, 1, 1,2, 627,311,165,76,1),
- (1,109,15,1, 1, 1,2, 627,387,165,89,1),
- (1,110,15,1, 1, 1,2, 627,476,165,69, 1);
+values (1,101,15,1, 1, 1,1,10,160,190,75,1),
+ (1,102,15,1, 1, 1,1, 10,235,190,76, 1),
+ (1,103,15,1, 1, 1,1, 10,311,190,89, 1),
+ (1,104,15,1, 1, 1,1, 10,400,190,86,1),
+ (1,105,15,1, 1, 1,1, 10,486,190,82,1),
+ (1,106,15,1, 1, 1,1, 627,164,165,73,1),
+ (1,107,15,1, 1, 1,1, 627,237,165,74,1),
+ (1,108,15,1, 1, 1,1, 627,311,165,76,1),
+ (1,109,15,1, 1, 1,1, 627,387,165,89,1),
+ (1,110,15,1, 1, 1,1, 627,476,165,69, 1);
  
  
- 
+
  /*cafeteria*/
-insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, nb_windows,x,y,width,height,fk_floor_map) values (1,111,50,2, 2,2,3,  287,377,258,223,1);
+insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, nb_windows,x,y,width,height,fk_floor_map) values (1,111,70,2, 2,2,0, 287,377,258,223,1);
  /*stairs */
-insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, nb_windows,x,y,width,height,fk_floor_map ) values (1,200,10 ,4, 1,1,1 ,200,4,337,88,1);
+insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, nb_windows,x,y,width,height,fk_floor_map ) values (1,200,20 ,4, 1,1,0 ,200,4,337,88,1);
  /*play room*/
-insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, nb_windows,x,y,width,height,fk_floor_map) values (1,112,65, 6, 2,2,1, 276,160,272,150,1);
+insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, nb_windows,x,y,width,height,fk_floor_map) values (1,112,65, 6, 2,2,0, 276,160,272,150,1);
  /*elevator */
-insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, nb_windows,x,y,width,height,fk_floor_map) values (1,201,5,5,2,1,1,    3,6,337,141,1);
+insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, nb_windows,x,y,width,height,fk_floor_map) values (1,201,9,5,2,1,0,3,6,146,141,1);
  
  /*toilet*/
-insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, nb_windows,x,y,width,height,fk_floor_map) values (1,113,115, 6, 6,1,1,644,3,156,93,1);
+insert into room (floor, room_number, m2, fk_type_room, fk_wing_room,nb_doors, nb_windows,x,y,width,height,fk_floor_map) values (1,113,6, 6, 6,1,0,644,3,156,93,1);
  
 
 /* TYPE SENSORS*/	
