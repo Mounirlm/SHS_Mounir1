@@ -30,6 +30,7 @@ import com.shs.commons.model.Building;
 import com.shs.commons.model.Floor;
 import com.shs.commons.model.Room;
 import com.shs.commons.model.Sensor;
+import com.shs.commons.model.Sensor.SensorState;
 import com.shs.commons.model.Stock;
 
 public class MapSHS extends JFrame implements IUpdatable {
@@ -58,10 +59,10 @@ public class MapSHS extends JFrame implements IUpdatable {
 	private JButton jbSearchInfoSensorInFloor;
 	private JLabel jLInfoSensor;
 
-	private final String[] entetes = { "Sensor_Name", "Sensor_Type", "Room_Number", "X_position", "Y_position", "Price",
-			"Mac_address", "IP_address", "State" };
+	private final String[] entetes = { "Name", "Type", "X_position", "Y_position", "Price", "@Mac", "@IP", "State",
+			"Room_Number", "Square_Meter", "Windows", "Doors" };
 
-	private JLabel labels[] = new JLabel[9];
+	private JLabel labels[] = new JLabel[12];
 
 	MapPanelView plan;
 	Building building;
@@ -144,7 +145,7 @@ public class MapSHS extends JFrame implements IUpdatable {
 		panE.setLayout(new GridLayout(8, 1));
 
 		panInfoSensorInstalledInFloor = new JPanel();
-		panInfoSensorInstalledInFloor.setLayout(new GridLayout(10, 1));
+		panInfoSensorInstalledInFloor.setLayout(new GridLayout(13, 1));
 		panInfoSensorInstalledInFloor.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		jbSearchInfoSensorInFloor = new JButton("SEARCH INFO");
@@ -261,15 +262,22 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 						if (jtxSensorId.getText() != "") {
 							boolean b = false;
-
 							for (Sensor s : f.getSensors()) {
 
 								if (s.getId() == Integer.parseInt(jtxSensorId.getText())) {
-									selected = s;
-									jtxSensorId.setText("");
-									b = true;
-									break;
 
+									if (s.getState().equals(SensorState.Marche)
+											|| s.getState().equals(SensorState.Alert)) {
+										JOptionPane.showMessageDialog(MapSHS.this, "Please, Stop the sensor before.",
+												"", JOptionPane.WARNING_MESSAGE);
+										return;
+
+									} else {
+										selected = s;
+										jtxSensorId.setText("");
+										b = true;
+										break;
+									}
 								}
 
 							}
@@ -364,9 +372,12 @@ public class MapSHS extends JFrame implements IUpdatable {
 						} else {
 
 							String info[] = { selected.getSensor_name(), selected.getFk_type_sensor().getName(),
-									selected.getFk_room().getRoom_number().toString(), selected.getX().toString(),
-									selected.getY().toString(), selected.getPrice().toString(),
-									selected.getMac_address(), selected.getIp_address(), selected.getState().name() };
+									selected.getX().toString(), selected.getY().toString(),
+									selected.getPrice().toString(), selected.getMac_address(), selected.getIp_address(),
+									selected.getState().name(), selected.getFk_room().getRoom_number().toString(),
+									selected.getFk_room().getM2().toString(),
+									selected.getFk_room().getNb_windows().toString(),
+									selected.getFk_room().getNb_doors().toString() };
 
 							for (int i = 0; i < info.length; i++) {
 								labels[i].setText(" " + entetes[i] + " : " + info[i]);
@@ -391,13 +402,10 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 					JOptionPane.showMessageDialog(MapSHS.this, "Please : Select an floor first ");
 				} else {
-					try {
-						building = buildingController.getBuilding();
-					} catch (IOException e1) {
 
-						e1.printStackTrace();
-					}
 					try {
+
+						building = buildingController.getBuilding();
 
 						f.setRoom((buildingController.getRoomListInFloor(f.getId())));
 						buildingController.setSensorInROOM(f);
@@ -410,6 +418,10 @@ public class MapSHS extends JFrame implements IUpdatable {
 						}
 
 						itemsListStock.setListData(buildingController.getSensorsNotInstalled().toArray());
+
+						for (int i = 0; i < labels.length; i++) {
+							labels[i].setText(" " + entetes[i] + " : " + "");
+						}
 
 					} catch (IOException e2) {
 
