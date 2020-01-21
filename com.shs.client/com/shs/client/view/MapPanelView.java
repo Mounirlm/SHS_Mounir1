@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -39,6 +37,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 	Sensor sensorToUpdate;
 
 	FormStockView fs = null;
+	JOptionPane jop1;
 
 	public MapPanelView(Building bg) {
 		this.building = bg;
@@ -46,6 +45,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		this.addMouseListener(this);
 		this.setActive(true);
 		this.addMouseMotionListener(this);
+		jop1 = new JOptionPane();
 
 		// DropTarget est un objet associé à un composant indiquant que celui-ci peut
 		// recevoir un DnD
@@ -55,6 +55,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 
 		this.setDropTarget(new DropTarget() {
 
+			@SuppressWarnings("static-access")
 			public void drop(DropTargetDropEvent dtde) {
 				// dtde:Appelé lors d'un drop
 				dtde.acceptDrop(dtde.getDropAction());
@@ -74,18 +75,34 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 
 					if (r.isPointInRoom(dtde.getLocation())) 
 					{
+						boolean b=false;
+						System.out.println( selected.getFk_type_sensor().getName());
 						// Test if exist two sensors of same type
 						if(r.isTypeSensorInRoom(selected)) 
 						{
 							selected=null;
 							JOptionPane.showMessageDialog(MapPanelView.this,
-									"Please, You can not install 2 sensors of same type in a room");
+									"Please, You can not install 2 sensors of same type in a room","",JOptionPane.WARNING_MESSAGE);
 							
 							return;
 							
 						}
 						
-					
+						// If no window exist in room, avoid mapping and displaying message
+						
+						else if(r.getNb_windows()==0 && selected.getFk_type_sensor().getName().equals("window_sensor"))
+						{ 
+							System.out.println(" je rentre dans la boucle");
+							
+							
+								selected=null;
+								MapPanelView.this.jop1.showMessageDialog(MapPanelView.this,
+										" There is no Window in this room.","",JOptionPane.WARNING_MESSAGE);
+								return;
+													
+						}
+						
+						else {
 						
 						room = r;
 						room.getSensors().add(selected);
@@ -108,6 +125,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 						MapPanelView.this.building.getStock().getSensors().remove(selected);
 						MapPanelView.this.getCurrent_floor().getSensors().add(selected);
 						activateListener();
+						}
 						}
 					}
 						
