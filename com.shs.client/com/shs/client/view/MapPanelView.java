@@ -50,7 +50,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 		// DropTarget est un objet associé à un composant indiquant que celui-ci peut
 		// recevoir un DnD
 		// on active le drop sur le PLAN
-		
+
 		this.setTransferHandler(new MyTransferHandler());
 
 		this.setDropTarget(new DropTarget() {
@@ -70,68 +70,74 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 
 				if (selected == null)
 					return;
-				
+				boolean b = false;
+
 				for (Room r : current_floor.getRoom()) {
 
-					if (r.isPointInRoom(dtde.getLocation())) 
-					{
-						boolean b=false;
-						System.out.println( selected.getFk_type_sensor().getName());
-						// Test if exist two sensors of same type
-						if(r.isTypeSensorInRoom(selected)) 
-						{
-							selected=null;
+					if (r.isPointInRoom(dtde.getLocation())) {
+
+						// Test if exist two sensors of same type in room <15 m2
+						if (r.isTypeSensorInRoom(selected) && r.getM2() <= 15) {
+							selected = null;
 							JOptionPane.showMessageDialog(MapPanelView.this,
-									"Please, You can not install 2 sensors of same type in a room","",JOptionPane.WARNING_MESSAGE);
-							
+									"Please, You can not install 2 sensors of same type in a room", "",
+									JOptionPane.WARNING_MESSAGE);
+
 							return;
-							
+
 						}
-						
-						// If no window exist in room, avoid mapping and displaying message
-						
-						else if(r.getNb_windows()==0 && selected.getFk_type_sensor().getName().equals("window_sensor"))
-						{ 
-							System.out.println(" je rentre dans la boucle");
-							
-							
-								selected=null;
-								MapPanelView.this.jop1.showMessageDialog(MapPanelView.this,
-										" There is no Window in this room.","",JOptionPane.WARNING_MESSAGE);
-								return;
-													
+
+						// If no window exist in room, avoid mapping window_sensor and displaying
+						// message
+
+						else if (r.getNb_windows() == 0
+								&& selected.getFk_type_sensor().getName().equals("window_sensor")) {
+
+							selected = null;
+							MapPanelView.this.jop1.showMessageDialog(MapPanelView.this,
+									" There is no Window in this room.", "", JOptionPane.WARNING_MESSAGE);
+							return;
+
 						}
-						
+
 						else {
-						
-						room = r;
-						room.getSensors().add(selected);
-						selected.setX((int) dtde.getLocation().getX());
-						selected.setY((int) dtde.getLocation().getY());
-						selected.setFk_room_id(r.getId());
-						
-						selected.setInstalled(true);
-						Date dte = new Date();
-						selected.setDate_setup(dte);
-						
-						try {
-							bc.update(selected);
 
-						} catch (IOException | SQLException e) {
+							room = r;
+							room.getSensors().add(selected);
+							selected.setX((int) dtde.getLocation().getX());
+							selected.setY((int) dtde.getLocation().getY());
+							selected.setFk_room_id(r.getId());
 
-							e.printStackTrace();
-						}
-						selected.setFk_room(room);
-						MapPanelView.this.building.getStock().getSensors().remove(selected);
-						MapPanelView.this.getCurrent_floor().getSensors().add(selected);
-						activateListener();
-						}
+							selected.setInstalled(true);
+							Date dte = new Date();
+							selected.setDate_setup(dte);
+
+							try {
+								bc.update(selected);
+
+							} catch (IOException | SQLException e) {
+
+								e.printStackTrace();
+							}
+							selected.setFk_room(room);
+							MapPanelView.this.building.getStock().getSensors().remove(selected);
+							MapPanelView.this.getCurrent_floor().getSensors().add(selected);
+							activateListener();
+							b = true;
 						}
 					}
-						
-				
 				}
-					
+
+				if (b == false) {
+					selected = null;
+					JOptionPane.showMessageDialog(MapPanelView.this, "Please, Map sensor inside room.", "",
+							JOptionPane.WARNING_MESSAGE);
+
+					return;
+				}
+
+			}
+
 		});
 
 	}
