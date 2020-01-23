@@ -1,0 +1,2 @@
+Log [text=L'état du capteur a changé vers :Marche, sensorName=10, date=2020/01/24 00:02:21]
+Log [text=L'état du capteur a changé vers :Alert, sensorName=10, date=2020/01/24 00:02:23]
