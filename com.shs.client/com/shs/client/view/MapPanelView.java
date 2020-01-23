@@ -80,8 +80,8 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 						if (r.isTypeSensorInRoom(selected) && r.getM2() <= 15) {
 							selected = null;
 							JOptionPane.showMessageDialog(MapPanelView.this,
-									"Please, You can not install 2 sensors of same type in a room", "",
-									JOptionPane.WARNING_MESSAGE);
+									"Please, You can not install 2 sensors of same type in a room with a surface area less than or equal to 15 square meters",
+									"", JOptionPane.WARNING_MESSAGE);
 
 							return;
 
@@ -107,7 +107,7 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 							selected.setX((int) dtde.getLocation().getX());
 							selected.setY((int) dtde.getLocation().getY());
 							selected.setFk_room_id(r.getId());
-
+							selected.setState(SensorState.Marche);
 							selected.setInstalled(true);
 							Date dte = new Date();
 							selected.setDate_setup(dte);
@@ -219,17 +219,27 @@ public class MapPanelView extends JPanel implements MouseListener, MouseMotionLi
 
 				if (e.getX() > s.getX() && e.getX() < s.getX() + 30 && e.getY() > s.getY()
 						&& e.getY() < s.getY() + 30) {
-
+					
+					
+					s.setFk_room_id(r.getId());
+					
 					if (s.getState() == SensorState.Marche) {
 						s.setState(SensorState.Alert);
-
+						
 					} else if (s.getState() == SensorState.Alert) {
 						s.setState(SensorState.Arret);
 
 					} else {
 						s.setState(SensorState.Marche);
 					}
+					try {
+						bc.update(s);
+					} catch (IOException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
+				
 				}
 			}
 		}
