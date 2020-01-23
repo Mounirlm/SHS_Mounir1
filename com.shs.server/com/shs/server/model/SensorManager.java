@@ -303,7 +303,7 @@ public class SensorManager {
 		return rs.getInt(1);
 	}
 
-	// get all sensors
+	//  Mounir : get all sensors
 	public static ArrayList<Sensor> getSensorsWithPosition() throws SQLException, ParseException {
 		Statement Stmt = conn.createStatement();
 		Statement Stmt2 = conn.createStatement();
@@ -362,7 +362,7 @@ public class SensorManager {
 							new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
 									rstype_sensor.getInt("trigger_point_min"),
 									rstype_sensor.getInt("trigger_point_max"), rstype_sensor.getInt("nb_alerts")),
-							RS.getInt("scope_sensor"), RS.getInt("x"), RS.getInt("y")));
+							RS.getInt("scope_sensor"), RS.getInt("x"), RS.getInt("y"),RS.getString("state")));
 
 				}
 			}
@@ -458,7 +458,7 @@ public class SensorManager {
 							new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
 									rstype_sensor.getInt("trigger_point_min"),
 									rstype_sensor.getInt("trigger_point_max"), rstype_sensor.getInt("nb_alerts")),
-							RS.getInt("scope_sensor"), RS.getInt("x"), RS.getInt("y")));
+							RS.getInt("scope_sensor"), RS.getInt("x"), RS.getInt("y"),RS.getString("state")));
 				}
 
 			}
@@ -536,7 +536,7 @@ public class SensorManager {
 							new Type_Sensor(rstype_sensor.getInt("id"), rstype_sensor.getString("name"),
 									rstype_sensor.getInt("trigger_point_min"),
 									rstype_sensor.getInt("trigger_point_max"), rstype_sensor.getInt("nb_alerts")),
-							RS.getInt("scope_sensor"), RS.getInt("x"), RS.getInt("y")));
+							RS.getInt("scope_sensor"), RS.getInt("x"), RS.getInt("y"),RS.getString("state")));
 				}
 
 			}
@@ -580,7 +580,7 @@ public class SensorManager {
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-			String sql = "INSERT INTO Sensor (sensor_name, ip_address, mac_address, status, installed, fk_position, price, fk_room, fk_type_sensor, scope_sensor,x,y) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO Sensor (sensor_name, ip_address, mac_address, status, installed, fk_position, price, fk_room, fk_type_sensor, scope_sensor,x,y,state) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?,?)";
 			int n = 0;
 
 			PreparedStatement preparedstatement = conn.prepareStatement(sql);
@@ -596,6 +596,7 @@ public class SensorManager {
 			preparedstatement.setObject(10, 10);
 			preparedstatement.setObject(11, null);
 			preparedstatement.setObject(12, null);
+			preparedstatement.setString(13, "Arret");
 
 			System.out.println(preparedstatement);
 			n = preparedstatement.executeUpdate();
@@ -616,7 +617,7 @@ public class SensorManager {
 
 			int n = 0;
 
-			pstmt = conn.prepareStatement("UPDATE sensor SET installed = ? , fk_room= ?, x= ?, y= ?  WHERE id = ? ");
+			pstmt = conn.prepareStatement("UPDATE sensor SET installed = ? , fk_room= ?, x= ?, y= ? ,state= ?  WHERE id = ? ");
 
 			System.out.println(sensor.getFk_room_id());
 
@@ -625,8 +626,9 @@ public class SensorManager {
 			pstmt.setObject(3, (Integer) sensor.getX());
 			pstmt.setObject(4, (Integer) sensor.getY());
 			// pstmt.setString(5, sensor.getDate_setup_formatted());
-			pstmt.setObject(5, (Integer) sensor.getId());
-
+			pstmt.setObject(5,  sensor.getStringFromState(sensor.getState()));
+			pstmt.setObject(6, (Integer) sensor.getId());
+			
 			System.out.println(pstmt);
 
 			n = pstmt.executeUpdate();
