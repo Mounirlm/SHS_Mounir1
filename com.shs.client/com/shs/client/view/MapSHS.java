@@ -196,24 +196,7 @@ public class MapSHS extends JFrame implements IUpdatable {
 				Floor f = (Floor) jcomboFloor.getSelectedItem();
 				setFloor(f);
 
-				try {
-
-					f.setRoom((buildingController.getRoomListInFloor(f.getId())));
-					buildingController.setSensorInROOM(f);
-
-					ArrayList<Sensor> sensor2 = new ArrayList<>();
-					for (Room r : f.getRoom()) {
-
-						sensor2.addAll(r.getSensors());
-					}
-
-					f.setSensors(sensor2);
-					plan.setCurrent_floor(f);
-
-				} catch (IOException e2) {
-
-					e2.printStackTrace();
-				}
+				updateFloor();
 
 			}
 		});
@@ -251,7 +234,9 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				Floor f = (Floor) jcomboFloor.getSelectedItem();
+				updateFloor();
 				Sensor selected = null;
 				Room roomSelected = null;
 
@@ -470,7 +455,7 @@ public class MapSHS extends JFrame implements IUpdatable {
 
 		Floor f = (Floor) jcomboFloor.getSelectedItem();
 		itemsListStock.setListData(building.getStock().getSensorArray());
-
+	
 	}
 
 	public Floor getFloor() {
@@ -480,5 +465,25 @@ public class MapSHS extends JFrame implements IUpdatable {
 	public void setFloor(Floor floor) {
 		this.floor = floor;
 	}
+	public void updateFloor() {
+		Floor f = this.floor;
+		try {
 
+			f.setRoom((buildingController.getRoomListInFloor(f.getId())));
+			buildingController.setSensorInROOM(f);
+
+			ArrayList<Sensor> sensor2 = new ArrayList<>();
+			for (Room r : f.getRoom()) {
+
+				sensor2.addAll(r.getSensors());
+			}
+
+			f.setSensors(sensor2);
+			plan.setCurrent_floor(f);
+
+		} catch (IOException e2) {
+
+			e2.printStackTrace();
+		}
+	}
 }
